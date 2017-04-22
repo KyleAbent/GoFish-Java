@@ -27,8 +27,8 @@ public class GoFishDialogue
           deckDealer.remove( deckDealer.get( idx) ); //object not int
            handComputer.add( value );
            deckDealer.trimToSize();
-           //System.out.println("computerHand added card # " + temp);
-           //System.out.println("deckDealer removed card # " + temp);
+           //System.out.println("computerHand added card # " + temp) ;
+           //System.out.println("deckDealer removed card # " + temp) ;
   }
    public static void createHumanHand(ArrayList deckDealer, ArrayList handHuman)
   {
