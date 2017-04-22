@@ -24,6 +24,8 @@ public class GoFishDialogue
       
      ArrayList<Integer>  handHuman = new ArrayList<Integer>();
      ArrayList<Integer>  handComputer = new ArrayList<Integer>();
+     ArrayList<Integer>  humanPairedCards = new ArrayList<Integer>();
+     
      
       
         	   Random rand = new Random();
@@ -32,23 +34,19 @@ public class GoFishDialogue
         int temp = deckDealer.get(rand.nextInt( deckDealer.size() ) );
         handHuman.add( temp );
         deckDealer.remove( temp );
-        System.out.println("handHuman added card # " + temp);
+      //  System.out.println("handHuman added card # " + temp);
         //System.out.println("deckDealer removed card # " + temp);
           }  
-       
-         
+          
         for (int index = 0; index < 5; index++) 
             {
         int temp = deckDealer.get(rand.nextInt( deckDealer.size() ) );
         handComputer.add( temp );
           deckDealer.remove( temp );
-            System.out.println("handComputer added card # " + temp);
+       //     System.out.println("handComputer added card # " + temp);
           //  System.out.println("deckDealer removed card # " + temp);
              }  
- 
-         
      
-  
   int numberToScan = 1;
   boolean match = false;
   boolean humanTurn = true;
@@ -57,26 +55,23 @@ public class GoFishDialogue
   int computerPoints = 0;
   //int gameMode = 0; 
   boolean cheating = true;
-  
-  
-  // for (int index = 0; index < handHuman.size(); index++){System.out.println("handHuman has card number" + handHuman.get(index));}
-  // for (int index = 0; index < handComputer.size(); index++){System.out.println("handComputer has card number" + handComputer.get(index));}  
+   //for (int index = 0; index < handHuman.size(); index++){System.out.println("handHuman has card number" + handHuman.get(index));}
+   //for (int index = 0; index < handComputer.size(); index++){System.out.println("handComputer has card number" + handComputer.get(index));}  
    //for (int index = 0; index < deckDealer.size(); index++){System.out.println("deckDealer(2) has card number" + deckDealer.get(index));}   	
-    
-   
   
-  humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,humanPoints, computerPoints);
+  humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,humanPoints, computerPoints, humanPairedCards);
    
 
            
  }
-  public static void computerInput(int numberToScan, ArrayList handHuman,  ArrayList handComputer,  ArrayList deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints)
+  public static void computerInput(int numberToScan, ArrayList handHuman,  ArrayList handComputer,  ArrayList deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards)
    {
    
-   System.out.println("computerPoints = " + computerPoints + "humanPoints = " + humanPoints);
+   System.out.println("\ncomputerPoints = " + computerPoints + ", humanPoints = " + humanPoints);
     //JOptionPane.showMessageDialog(null, "Computers Turn!");
    Random random = new Random();
    numberToScan = random.nextInt(handComputer.size());
+   System.out.println("computer chose card #" + numberToScan);
          for (int i = 0; i < handHuman.size(); i++) 
           {
          if (handHuman.get(i).equals(numberToScan))
@@ -90,35 +85,49 @@ public class GoFishDialogue
       if (match){computerPoints = computerPoints + 1; removeCardHumanComputer(numberToScan, handHuman, handComputer, humanPoints, computerPoints);}
       else{ addCard(humanTurn, computerTurn, handHuman, handComputer, deckDealer); humanTurn = true;computerTurn = false;}
       
-      if (humanTurn){numberToScan = 0; humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,  humanPoints, computerPoints);}
-      else if (computerTurn){ match = false; numberToScan = 0;computerInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn, humanPoints, computerPoints); }
+      if (humanTurn){numberToScan = 0; humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,  humanPoints, computerPoints,  humanPairedCards);}
+      else if (computerTurn){ match = false; numberToScan = 0;computerInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn, humanPoints, computerPoints,  humanPairedCards); }
       
        
    
       
    }
-  public static void humanInput(int numberToScan, ArrayList handHuman,  ArrayList handComputer,  ArrayList deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints)
+  public static void humanInput(int numberToScan, ArrayList handHuman,  ArrayList handComputer,  ArrayList deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards)
   {
 
- String output = "";
+ String handHumanCards = "";
      for(int i = 0; i<handHuman.size(); i++)
       {
-      String cards = handHuman.get(i).toString();
-      output += cards +" ";        
+      String handCards = handHuman.get(i).toString();
+      handHumanCards += handCards +" ";        
      }
-   System.out.print("deckDealer: " + deckDealer.size() + " cards left in the deck\n!" );
-   System.out.println("computerPoints = " + computerPoints + "humanPoints = " + humanPoints);
-   System.out.print("\nPick a card from your hand: " + output);
-   Scanner keyboard = new Scanner(System.in);
+     
+      String handHumanCardsPaired = "";
+     for(int i = 0; i<humanPairedCards.size(); i++)
+      {
+      String pairedCards = humanPairedCards.get(i).toString();
+      handHumanCardsPaired += pairedCards +" ";        
+     }
+   System.out.print("\nYour already paired cards are: " + handHumanCardsPaired);
+   System.out.print("\ndeckDealer: " + deckDealer.size() + " cards left in the deck\n" );
+   System.out.println("computerPoints = " + computerPoints + " humanPoints = " + humanPoints);
+   System.out.print("\n (0 to draw card)"); //, or double number to trade pair for points (eg: 99 for two 9's on hand) )" + output);
+   System.out.print("\nPick a card from your hand: " + handHumanCards);
+      Scanner keyboard = new Scanner(System.in);
    numberToScan = keyboard.nextInt();  
-   //System.out.println("numberToscan is" + numberToScan);
-   humanAlgorithm(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn, humanPoints,  computerPoints );
+   System.out.println("\nhuman chose card #" + numberToScan);
+   humanAlgorithm(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn, humanPoints,  computerPoints,  humanPairedCards );
    
     
   }
-  public static void humanAlgorithm(int numberToScan, ArrayList handHuman, ArrayList handComputer,  ArrayList deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints)
+  public static void humanAlgorithm(int numberToScan, ArrayList handHuman, ArrayList handComputer,  ArrayList deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards)
   {
     cheating = true; //always assume
+    
+    if (numberToScan == 0) 
+    {
+     cheating = false;
+    }
     
       for (int i = 0; i < handHuman.size(); i++) 
        {
@@ -133,7 +142,7 @@ public class GoFishDialogue
      
       for (int i = 0; i < handComputer.size(); i++) 
        {
-       // System.out.println("NumberToScan is" + numberToScan + "index number is " + handComputer.get(i) ); 
+      //  System.out.println("humanAlgorithm NumberToScan is" + numberToScan + "index number is " + handComputer.get(i) ); 
         if (handComputer.get(i).equals(numberToScan))
          {
             match = true;
@@ -147,6 +156,7 @@ public class GoFishDialogue
                  if (match)
                     {
                      JOptionPane.showMessageDialog(null, "Match! Go Again!");
+                     humanPairedCards.add( numberToScan ); humanPairedCards.add( numberToScan );
                      removeCardHumanComputer(numberToScan, handHuman, handComputer,  humanPoints, computerPoints);
                      match = false;
                      humanPoints = humanPoints + 1;
@@ -160,22 +170,22 @@ public class GoFishDialogue
               }
               
               
-               System.out.println("humanTurn is " + humanTurn);
-               System.out.println("computerTurn is " + computerTurn);
+              // System.out.println("humanTurn is " + humanTurn);
+              // System.out.println("computerTurn is " + computerTurn);
                
                 if  (humanTurn) 
                 {
-                   humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn, humanPoints,computerPoints );
+                   humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn, humanPoints,computerPoints, humanPairedCards );
                 }
                else if (computerTurn)
                 { 
                    numberToScan = 0;
-                   computerInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn, humanPoints, computerPoints);
+                   computerInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn, humanPoints, computerPoints, humanPairedCards);
                 }
                 
                 if (humanTurn)
                 {
-                humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn, humanPoints, computerPoints );
+                humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn, humanPoints, computerPoints, humanPairedCards );
                 }
                 
                 
@@ -196,11 +206,12 @@ public class GoFishDialogue
             for (int index = 0; index < 1; index++) 
             {
             int temp = (int)deckDealer.get(rand.nextInt( deckDealer.size() ) );
-            handComputer.add( temp );
+            handHuman.add( temp );
             deckDealer.remove( temp );
-            System.out.println("handComputer added card # " + temp);
-            System.out.println("deckDealer removed card # " + temp);
+      //      System.out.println("handHuman added card # " + temp);
+           // System.out.println("deckDealer removed card # " + temp);
             JOptionPane.showMessageDialog(null, "GoFish! (humanTurn)");
+             System.out.println("GoFish! (humanTurn)");
             break;
             }  
          }
@@ -212,9 +223,10 @@ public class GoFishDialogue
             int temp = (int)deckDealer.get(rand.nextInt( deckDealer.size() ) );
             handComputer.add( temp );
             deckDealer.remove( temp );
-            System.out.println("handComputer added card # " + temp);
+      //      System.out.println("handComputer added card # " + temp);
             JOptionPane.showMessageDialog(null, "GoFish! (computerTurn)");
-            System.out.println("deckDealer removed card # " + temp);
+            System.out.println("GoFish! (computerTurn)");
+          //  System.out.println("deckDealer removed card # " + temp);
             break;
              }  
          }
@@ -225,10 +237,10 @@ public class GoFishDialogue
     
        for (int i = 0; i < handHuman.size(); i++) 
        {
-       // System.out.println("NumberToScan is" + numberToScan + "index number is " + handHuman.get(i) ); 
+      //  System.out.println("removeCardHumanComputer handHuman NumberToScan is" + numberToScan + "index number is " + handHuman.get(i) ); 
         if (handHuman.get(i).equals(numberToScan))
          {
-          System.out.println("removing from human card # " + handHuman.get(i));
+           System.out.println("removing from human card # " + handHuman.get(i));
            handHuman.remove(i);
            break;
           }
@@ -236,18 +248,18 @@ public class GoFishDialogue
         
         for (int i = 0; i < handComputer.size(); i++) 
        {
-       // System.out.println("NumberToScan is" + numberToScan + "index number is " + handComputer.get(i) ); 
+      //  System.out.println("removeCardHumanComputer handComputer NumberToScan is" + numberToScan + "index number is " + handComputer.get(i) ); 
         if (handComputer.get(i).equals(numberToScan))
          {
-          System.out.println("removing from computer card # " + handComputer.get(i));
+           System.out.println("removing from computer card # " + handComputer.get(i));
            handComputer.remove(i);
            break;
           }
         }               
 
       
-    for (int index = 0; index < handHuman.size(); index++) {System.out.println("handHuman has card number" + handHuman.get(index));}
-    for (int index = 0; index < handComputer.size(); index++) {System.out.println("handComputer has card number" + handComputer.get(index));}    
+  //  for (int index = 0; index < handHuman.size(); index++) {System.out.println("handHuman has card number" + handHuman.get(index));}
+    //for (int index = 0; index < handComputer.size(); index++) {System.out.println("handComputer has card number" + handComputer.get(index));}    
     
   }
    
