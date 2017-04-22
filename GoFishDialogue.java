@@ -27,8 +27,6 @@ public class GoFishDialogue
           deckDealer.remove( deckDealer.get( idx) ); //object not int
            handComputer.add( value );
            deckDealer.trimToSize();
-           //System.out.println("computerHand added card # " + temp) ;
-           //System.out.println("deckDealer removed card # " + temp) ;
   }
    public static void createHumanHand(ArrayList deckDealer, ArrayList handHuman)
   {
@@ -40,16 +38,19 @@ public class GoFishDialogue
           deckDealer.remove( deckDealer.get( idx) ); //object not int
            handHuman.add( value );
            deckDealer.trimToSize();
-           //System.out.println("handHuman added card # " + temp);
-           //System.out.println("deckDealer removed card # " + temp);
   }
   public static void main(String[] args)
   {
   Scanner keyboard = new Scanner(System.in);
+  
+
+      
    //Arraylist because Integer Array's do not allow deletion simply.
    ArrayList<Integer>  deckDealer = new ArrayList<Integer>();
    
    CreateDealer(deckDealer);
+   
+   
     
      
     //for (int index = 0; index < deckDealer.size(); index++) {System.out.println("deckDealer(1) has card number" + deckDealer.get(index));}   	
@@ -57,18 +58,20 @@ public class GoFishDialogue
      ArrayList<Integer>  handHuman = new ArrayList<Integer>();
      ArrayList<Integer>  handComputer = new ArrayList<Integer>();
      ArrayList<Integer>  humanPairedCards = new ArrayList<Integer>();
+     
+     createHumanHand(deckDealer, handHuman);
+     createHumanHand(deckDealer, handHuman);
+     createHumanHand(deckDealer, handHuman);
+     createHumanHand(deckDealer, handHuman);
+     createHumanHand(deckDealer, handHuman);
+     createComputerHand(deckDealer, handComputer);
+     createComputerHand(deckDealer, handComputer);
+     createComputerHand(deckDealer, handComputer);
+     createComputerHand(deckDealer, handComputer);
+     createComputerHand(deckDealer, handComputer);
    
       
-     createHumanHand(deckDealer, handHuman);
-     createHumanHand(deckDealer, handHuman);
-     createHumanHand(deckDealer, handHuman);
-     createHumanHand(deckDealer, handHuman);
-     createHumanHand(deckDealer, handHuman);
-     createComputerHand(deckDealer, handComputer);
-     createComputerHand(deckDealer, handComputer);
-     createComputerHand(deckDealer, handComputer);
-     createComputerHand(deckDealer, handComputer);
-     createComputerHand(deckDealer, handComputer);
+       
    
      
  
@@ -81,13 +84,8 @@ public class GoFishDialogue
   int humanPoints = 0;
   int computerPoints = 0;
   int turnCounter = 0;
-  //int gameMode = 0; 
   boolean cheating = true;
   int difficultyLevel = 0;
-   //for (int index = 0; index < handHuman.size(); index++){System.out.println("handHuman has card number" + handHuman.get(index));}
-   //for (int index = 0; index < handComputer.size(); index++){System.out.println("handComputer has card number" + handComputer.get(index));}  
-   //for (int index = 0; index < deckDealer.size(); index++){System.out.println("deckDealer(2) has card number" + deckDealer.get(index));}   	
-   
      
       System.out.print("\nChoose difficulty level (1-99 as in percent of odds getting a correct card): ");
       difficultyLevel = keyboard.nextInt(); 
@@ -98,13 +96,11 @@ public class GoFishDialogue
  }
    public static void computerMatchPicked(int numberToScan, boolean match, boolean hasPicked)
  {
-            // match = true;
-            //hasPicked = true;
             JOptionPane.showMessageDialog(null, "(computer):Do you have a " + numberToScan + "?" + "(matched)");
  }
     public static void computerEmptyHand(int numberToScan, ArrayList handHuman,  ArrayList handComputer,  ArrayList deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
  {
-        JOptionPane.showMessageDialog(null,"(computer):Empty hand, drawing card."); 
+     JOptionPane.showMessageDialog(null,"(computer):Empty hand, drawing card."); 
      addCard(humanTurn, computerTurn, handHuman, handComputer, deckDealer,  humanPoints,  computerPoints);
      humanTurn = true; 
      computerTurn = false;
@@ -120,10 +116,9 @@ public class GoFishDialogue
  }
      public static void humanEmptyHandComputerTurn(int numberToScan, ArrayList handHuman,  ArrayList handComputer,  ArrayList deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
  {
-      JOptionPane.showMessageDialog(null,"Empty hand, drawing card."); 
-     addCard(humanTurn, computerTurn, handHuman, handComputer, deckDealer, humanPoints, computerPoints);
-     humanTurn = true; 
+      humanTurn = true; 
      computerTurn = false;
+     addCard(humanTurn, computerTurn, handHuman, handComputer, deckDealer, humanPoints, computerPoints);
      humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,  humanPoints, computerPoints,  humanPairedCards, turnCounter, difficultyLevel);
  }
   public static void computerInput(int numberToScan, ArrayList handHuman,  ArrayList handComputer,  ArrayList deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
