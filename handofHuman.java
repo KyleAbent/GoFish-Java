@@ -1,15 +1,15 @@
 import java.util.ArrayList;
 import java.util.Random;
-
+import javax.swing.JOptionPane;
 
 public class handofHuman
 {
-private ArrayList<Integer>  handHuman = new ArrayList<Integer>();
-}
+ private static ArrayList<Integer>  handHuman = new ArrayList<Integer>();
 
-
-  
-   public static ArrayList createHand(ArrayList deckDealer)
+      public static void main(String[] args)
+  {
+  }
+   public static void createHand(ArrayList deckDealer)
   {
           Random rand = new Random();
           int idx = rand.nextInt(deckDealer.size());
@@ -19,21 +19,28 @@ private ArrayList<Integer>  handHuman = new ArrayList<Integer>();
           handHuman.add( value );
           deckDealer.trimToSize();
   }
-      public static void humanEmptyHand(int numberToScan, ArrayList handHuman,  ArrayList handComputer,  ArrayList deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
+  public static ArrayList getHand()
+  {
+     return handHuman;
+  }
+    public static boolean getisEmpty()
+  {
+     return (handHuman.size() == 0);
+  }
+      public static void EmptyHand(int numberToScan, handofHuman handHuman,  handofComputer handComputer,  deckofDealer deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
  {
-      JOptionPane.showMessageDialog(null,"Empty hand, drawing card."); 
-     addCard(humanTurn, computerTurn, handHuman, handComputer, deckDealer, humanPoints, computerPoints);
+     JOptionPane.showMessageDialog(null,"Empty hand, drawing card."); 
+     addCard(handComputer,deckDealer, humanPoints, computerPoints);
      humanTurn = false; 
      computerTurn = true;
-     computerInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn, humanPoints, computerPoints, humanPairedCards, turnCounter, difficultyLevel);
  }
-    public static void addCard(boolean humanTurn, boolean computerTurn, ArrayList handHuman, ArrayList handComputer, ArrayList deckDealer, int humanPoints, int computerPoints)
+    public static void addCard(handofComputer handComputer, deckofDealer deckDealer, int humanPoints, int computerPoints)
    {    
    
-           deckDealer.trimToSize(); 
+           deckDealer.getDeck().trimToSize(); 
            
            
-     if  ( deckDealer.size() == 0 ) 
+     if  ( deckDealer.getisEmpty() ) 
      {
      //JOptionPane.showMessageDialog(null,"deckDealer is empty!"); 
      JOptionPane.showMessageDialog(null,"!!Game Over!! (Warning 1 of 4)"); 
@@ -46,8 +53,8 @@ private ArrayList<Integer>  handHuman = new ArrayList<Integer>();
      
      
     Random rand = new Random();     
-    int idx = rand.nextInt(deckDealer.size());
-    int value = (int)deckDealer.get(idx);
+    int idx = rand.nextInt(deckDealer.getDeck().size());
+    int value = (int)deckDealer.getDeck().get(idx);
     int temp = idx;
      
       if (value == 0) 
@@ -58,50 +65,49 @@ private ArrayList<Integer>  handHuman = new ArrayList<Integer>();
       return;
       }
       
-     deckDealer.remove( deckDealer.get( idx) ); //object not int
+     deckDealer.getDeck().remove( deckDealer.getDeck().get( idx) ); //object not int
  	
-       deckDealer.trimToSize();  
+       deckDealer.getDeck().trimToSize();  
       // System.out.println("deckDealer removed card # " + temp);
-       
-         if (humanTurn)
-         {                
+                   
             handHuman.add( value );
             System.out.println("handHuman added card # " + value);
             JOptionPane.showMessageDialog(null, "GoFish! (humanTurn)");
             System.out.println("GoFish! (humanTurn)");
-         
    }
    
    
-   public static void removeCardHumanComputer(int numberToScan, ArrayList handHuman, ArrayList handComputer, int humanPoints, int computerPoints)
+     public static void removePair(int one, int two)
     {
-    
-       for (int i = 0; i < handHuman.size(); i++) 
+     {JOptionPane.showMessageDialog(null,"removing pairs " + one + two); }
+     
+      for (int i = 0; i < handHuman.size(); i++) 
        {
       //  System.out.println("removeCardHumanComputer handHuman NumberToScan is" + numberToScan + "index number is " + handHuman.get(i) ); 
-        if (handHuman.get(i).equals(numberToScan))
+        if (handHuman.get(i).equals(one))
          {
            System.out.println("removing from human card # " + handHuman.get(i));
            handHuman.remove(i);
-           handHuman.trimToSize();
            break;
           }
-       }    
-        
-        for (int i = 0; i < handComputer.size(); i++) 
+       }  
+       
+       
+                      for (int i = 0; i < handHuman.size(); i++) 
        {
-      //  System.out.println("removeCardHumanComputer handComputer NumberToScan is" + numberToScan + "index number is " + handComputer.get(i) ); 
-        if (handComputer.get(i).equals(numberToScan))
+      //  System.out.println("removeCardHumanComputer handHuman NumberToScan is" + numberToScan + "index number is " + handHuman.get(i) ); 
+        if (handHuman.get(i).equals(two))
          {
-           System.out.println("removing from computer card # " + handComputer.get(i));
-           handComputer.remove(i);
-           handComputer.trimToSize();
+           System.out.println("removing from human card # " + handHuman.get(i));
+           handHuman.remove(i);
            break;
           }
-        }               
+       }        
+    } 
 
-      
-  //  for (int index = 0; index < handHuman.size(); index++) {System.out.println("handHuman has card number" + handHuman.get(index));}
-    //for (int index = 0; index < handComputer.size(); index++) {System.out.println("handComputer has card number" + handComputer.get(index));}    
-    
-  }
+
+
+ 
+ 
+
+}

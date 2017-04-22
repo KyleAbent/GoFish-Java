@@ -3,10 +3,14 @@ import java.util.Random;
 public class deckofDealer
 {
 private double length;
-private ArrayList<Integer> deckDealer = new ArrayList<Integer>();
+private static ArrayList<Integer> deckDealer = new ArrayList<Integer>();
     
     
-  public static void CreateDeck(ArrayList deckDealer)
+  public static void main(String[] args)
+  {
+  }
+  
+  public static void CreateDeck()
   {  //A, J, K, Q??
      for (int index = 0; index <= 4; index++)
    {
@@ -16,6 +20,14 @@ private ArrayList<Integer> deckDealer = new ArrayList<Integer>();
    
   }
   
+  public static ArrayList getDeck()
+  {
+   return deckDealer;
+  } 
   
+ public static boolean getisEmpty()
+  {
+     return (deckDealer.size() == 0);
+  }
   
 }

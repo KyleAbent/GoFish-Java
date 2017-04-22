@@ -1,9 +1,15 @@
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.JOptionPane;
 public class handofComputer
+
+
 {
-private ArrayList<Integer>  handComputer = new ArrayList<Integer>();
-}
+private static ArrayList<Integer>  handComputer = new ArrayList<Integer>();
+
+      public static void main(String[] args)
+  {
+  }
   
      public static void createHand(ArrayList deckDealer)
   {
@@ -16,33 +22,38 @@ private ArrayList<Integer>  handComputer = new ArrayList<Integer>();
            handComputer.add( value );
            deckDealer.trimToSize();
   }
-  
-     public static void computerMatchPicked(int numberToScan, boolean match, boolean hasPicked)
+    public static ArrayList getHand()
+  {
+     return handComputer;
+  }
+      public static boolean getisEmpty()
+  {
+     return (handComputer.size() == 0);
+  }
+     public static void MatchPicked(int numberToScan, boolean match, boolean hasPicked)
  {
             JOptionPane.showMessageDialog(null, "(computer):Do you have a " + numberToScan + "?" + "(matched)");
  }
-    public static void computerEmptyHand(int numberToScan, ArrayList handHuman,  ArrayList handComputer,  ArrayList deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
+    public static void EmptyHand(int numberToScan, handofHuman handHuman,  handofComputer handComputer,  deckofDealer deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
  {
      JOptionPane.showMessageDialog(null,"(computer):Empty hand, drawing card."); 
      addCard(humanTurn, computerTurn, handHuman, handComputer, deckDealer,  humanPoints,  computerPoints);
      humanTurn = true; 
      computerTurn = false;
-     humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,  humanPoints, computerPoints,  humanPairedCards, turnCounter, difficultyLevel);
  }
-     public static void humanEmptyHandComputerTurn(int numberToScan, ArrayList handHuman,  ArrayList handComputer,  ArrayList deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
+     public static void humanEmptyHandComputerTurn(int numberToScan, handofHuman handHuman, handofComputer handComputer, deckofDealer deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
  {
       humanTurn = true; 
      computerTurn = false;
      addCard(humanTurn, computerTurn, handHuman, handComputer, deckDealer, humanPoints, computerPoints);
-     humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,  humanPoints, computerPoints,  humanPairedCards, turnCounter, difficultyLevel);
  }
-  public static void addCard(boolean humanTurn, boolean computerTurn, ArrayList handHuman, ArrayList handComputer, ArrayList deckDealer, int humanPoints, int computerPoints)
+  public static void addCard(boolean humanTurn, boolean computerTurn, handofHuman handHuman, handofComputer handComputer, deckofDealer deckDealer, int humanPoints, int computerPoints)
    {    
    
-           deckDealer.trimToSize(); 
+           deckDealer.getDeck().trimToSize(); 
            
            
-     if  ( deckDealer.size() == 0 ) 
+     if  ( deckDealer.getisEmpty() ) 
      {
      //JOptionPane.showMessageDialog(null,"deckDealer is empty!"); 
      JOptionPane.showMessageDialog(null,"!!Game Over!! (Warning 1 of 4)"); 
@@ -55,8 +66,8 @@ private ArrayList<Integer>  handComputer = new ArrayList<Integer>();
      
      
     Random rand = new Random();     
-    int idx = rand.nextInt(deckDealer.size());
-    int value = (int)deckDealer.get(idx);
+    int idx = rand.nextInt(deckDealer.getDeck().size());
+    int value = (int)deckDealer.getDeck().get(idx);
     int temp = idx;
      
       if (value == 0) 
@@ -67,12 +78,12 @@ private ArrayList<Integer>  handComputer = new ArrayList<Integer>();
       return;
       }
       
-     deckDealer.remove( deckDealer.get( idx) ); //object not int
+     deckDealer.getDeck().remove( deckDealer.getDeck().get( idx) ); //object not int
  	
-       deckDealer.trimToSize();  
+       deckDealer.getDeck().trimToSize();  
       // System.out.println("deckDealer removed card # " + temp);
        
-            handComputer.add( temp );
+            getHand().add( temp );
            // System.out.println("handComputer added card # " + temp);
             JOptionPane.showMessageDialog(null, "GoFish! (computerTurn)");
             System.out.println("GoFish! (computerTurn)");
@@ -137,3 +148,4 @@ private ArrayList<Integer>  handComputer = new ArrayList<Integer>();
           }
        }        
     } 
+ }

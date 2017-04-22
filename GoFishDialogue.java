@@ -16,9 +16,17 @@ public class GoFishDialogue
    deckofDealer deckDealer = new deckofDealer();
    handofHuman handHuman = new handofHuman();
    handofComputer handComputer = new handofComputer();
-    //for (int index = 0; index < deckDealer.size(); index++) {System.out.println("deckDealer(1) has card number" + deckDealer.get(index));}   	
-   handofHuman.createHand(deckDealer);
-   handofComputer.createHand(deckDealer);
+    //for (int index = 0; index < deckDealer.size(); index++) {System.out.println("deckDealer(1) has card number" + deckDealer.get(index));}  
+   deckDealer.CreateDeck(); 	
+   
+    for (int i = 0; i <5; i++) 
+    {
+   handofHuman.createHand(deckDealer.getDeck());
+   handofComputer.createHand(deckDealer.getDeck());
+   }
+   
+   
+   ArrayList<Integer> humanPairedCards = new ArrayList<Integer>();
      
   int numberToScan = 1;
   boolean match = false;
@@ -37,12 +45,50 @@ public class GoFishDialogue
   humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,humanPoints, computerPoints, humanPairedCards, turnCounter, difficultyLevel);
            
  }
+   public static void removeCardHumanComputer(int numberToScan, handofHuman handHuman, handofComputer handComputer, int humanPoints, int computerPoints)
+    {
+    
+       for (int i = 0; i < handHuman.getHand().size(); i++) 
+       {
+      //  System.out.println("removeCardHumanComputer handHuman NumberToScan is" + numberToScan + "index number is " + handHuman.get(i) ); 
+        if (handHuman.getHand().get(i).equals(numberToScan))
+         {
+           System.out.println("removing from human card # " + handHuman.getHand().get(i));
+           handHuman.getHand().remove(i);
+           handHuman.getHand().trimToSize();
+           break;
+          }
+       }    
+        
+        for (int i = 0; i < handComputer.getHand().size(); i++) 
+       {
+      //  System.out.println("removeCardHumanComputer handComputer NumberToScan is" + numberToScan + "index number is " + handComputer.get(i) ); 
+        if (handComputer.getHand().get(i).equals(numberToScan))
+         {
+           System.out.println("removing from computer card # " + handComputer.getHand().get(i));
+           handComputer.getHand().remove(i);
+           handComputer.getHand().trimToSize();
+           break;
+          }
+        }               
 
-    public static void computerInput(int numberToScan, ArrayList handHuman,  ArrayList handComputer,  ArrayList deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
+      
+  //  for (int index = 0; index < handHuman.size(); index++) {System.out.println("handHuman has card number" + handHuman.get(index));}
+    //for (int index = 0; index < handComputer.size(); index++) {System.out.println("handComputer has card number" + handComputer.get(index));}    
+    
+  }
+    public static void computerInput(int numberToScan, handofHuman handHuman, handofComputer handComputer, deckofDealer deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
    {
-   boolean skipTurn = false;
-  if ( handComputer.size() == 0 ){computerEmptyHand(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,  humanPoints, computerPoints,  humanPairedCards, turnCounter, difficultyLevel);}
-  if  ( handHuman.size() == 0 ){skipTurn = true; humanEmptyHandComputerTurn(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn = false,  humanPoints, computerPoints,  humanPairedCards, turnCounter, difficultyLevel);}
+    if ( handComputer.getisEmpty() )
+       {handComputer.EmptyHand(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,  humanPoints, computerPoints,  humanPairedCards, turnCounter, difficultyLevel);
+        humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,  humanPoints, computerPoints,  humanPairedCards, turnCounter, difficultyLevel);
+     }
+       if  ( handHuman.getisEmpty() )
+       {
+       handHuman.EmptyHand(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,  humanPoints, computerPoints,  humanPairedCards, turnCounter, difficultyLevel);
+       humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,  humanPoints, computerPoints,  humanPairedCards, turnCounter, difficultyLevel);
+       //computerInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn, humanPoints, computerPoints, humanPairedCards, turnCounter, difficultyLevel);
+       }
    System.out.println("\ncomputerPoints = " + computerPoints + ", humanPoints = " + humanPoints);
     System.out.println("\nturnCounter = " + turnCounter);
     //JOptionPane.showMessageDialog(null, "Computers Turn!");
@@ -52,13 +98,13 @@ public class GoFishDialogue
 
     if (difficultyLevel >= tunedNumber) 
       {
-          int idx = random.nextInt(handHuman.size());
-          int value = (int)handHuman.get(idx);
+          int idx = random.nextInt(handHuman.getHand().size());
+          int value = (int)handHuman.getHand().get(idx);
        numberToScan = value ;
      }
        else
        { 
-       numberToScan = random.nextInt(handComputer.size()) ;
+       numberToScan = random.nextInt(handComputer.getHand().size()) ;
        }
    System.out.println("computer chose card #" + numberToScan);
     boolean isZero = (numberToScan == 0);
@@ -67,11 +113,11 @@ public class GoFishDialogue
        
        boolean hasPicked = false;
           
-         for (int i = 0; i < handHuman.size(); i++) 
+         for (int i = 0; i < handHuman.getHand().size(); i++) 
           {
-         if ( !hasPicked && !isZero && handHuman.get(i).equals(numberToScan))
+         if ( !hasPicked && !isZero && handHuman.getHand().get(i).equals(numberToScan))
           { 
-           computerMatchPicked( numberToScan, match, hasPicked );
+           handComputer.MatchPicked( numberToScan, match, hasPicked );
             match = true;
             hasPicked = true;
           }
@@ -83,18 +129,23 @@ public class GoFishDialogue
       if (humanTurn){numberToScan = 0; humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,  humanPoints, computerPoints,  humanPairedCards, turnCounter, difficultyLevel);}
       else if (computerTurn){ match = false; numberToScan = 0;computerInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn, humanPoints, computerPoints,  humanPairedCards, turnCounter, difficultyLevel); }  
    }
-  public static void humanInput(int numberToScan, ArrayList handHuman,  ArrayList handComputer,  ArrayList deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
+  public static void humanInput(int numberToScan, handofHuman handHuman,  handofComputer handComputer,  deckofDealer deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
   {
 
  String handHumanCards = "";
  
-     if  ( handHuman.size() == 0 ){humanEmptyHand(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,  humanPoints, computerPoints,  humanPairedCards, turnCounter, difficultyLevel);}
+     if  ( handHuman.getisEmpty() )
+     
+     { 
+     handHuman.EmptyHand(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,  humanPoints, computerPoints,  humanPairedCards, turnCounter, difficultyLevel);
+     computerInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn, humanPoints, computerPoints, humanPairedCards, turnCounter, difficultyLevel);
+     }
      
 
       
-     for(int i = 0; i<handHuman.size(); i++)
+     for(int i = 0; i<handHuman.getHand().size(); i++)
       {
-      String handCards = handHuman.get(i).toString();
+      String handCards = handHuman.getHand().get(i).toString();
       handHumanCards += handCards +" ";        
      }
      
@@ -105,13 +156,13 @@ public class GoFishDialogue
       handHumanCardsPaired += pairedCards +" ";        
      }
      
-          if  ( deckDealer.size() == 0 ) 
+          if  ( deckDealer.getisEmpty() ) 
      {
      JOptionPane.showMessageDialog(null,"deckDealer deck is empty!"); 
      }
 
    System.out.print("\nYour already paired cards are: " + handHumanCardsPaired);
-   System.out.print("\ndeckDealer: " + deckDealer.size() + " cards left in the deck\n" );
+   System.out.print("\ndeckDealer: " + deckDealer.getDeck().size() + " cards left in the deck\n" );
    System.out.println("computerPoints = " + computerPoints + " humanPoints = " + humanPoints);
    System.out.print("\n (0 to draw card, double number to place down pair)"); //, or double number to trade pair for points (eg: 99 for two 9's on hand) )" + output);
    System.out.print("\nPick a card from your hand: " + handHumanCards + " \n");
@@ -122,7 +173,7 @@ public class GoFishDialogue
    
     
   }
-  public static void humanAlgorithm(int numberToScan, ArrayList handHuman, ArrayList handComputer,  ArrayList deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
+  public static void humanAlgorithm(int numberToScan, handofHuman handHuman,  handofComputer handComputer,  deckofDealer deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
   {
     cheating = true; //always assume
     int one = numberToScan / 10;
@@ -140,9 +191,9 @@ public class GoFishDialogue
     
     if (tunedNumber != 0) { numberToScan = tunedNumber; }
     
-      for (int i = 0; i < handHuman.size(); i++) 
+      for (int i = 0; i < handHuman.getHand().size(); i++) 
        {
-        if (handHuman.get(i).equals(numberToScan)){cheating = false;}
+        if (handHuman.getHand().get(i).equals(numberToScan)){cheating = false;}
        }
     
      
@@ -150,16 +201,16 @@ public class GoFishDialogue
      
      
      if (pair && !cheating) { 
-                removePairHuman(one, two, handHuman); 
+                handHuman.removePair(one, two); 
                 humanPoints = humanPoints + 1;
                 humanTurn = false; 
                 turnCounter = turnCounter + 1;
                 computerTurn = true;             
               }
-      for (int i = 0; i < handComputer.size(); i++) 
+      for (int i = 0; i < handComputer.getHand().size(); i++) 
        {
       //  System.out.println("humanAlgorithm NumberToScan is" + numberToScan + "index number is " + handComputer.get(i) ); 
-        if (!isZero && handComputer.get(i).equals(numberToScan))
+        if (!isZero && handComputer.getHand().get(i).equals(numberToScan))
          {
             match = true;
           }
@@ -180,7 +231,7 @@ public class GoFishDialogue
                  else
                     //humanNotMatch(humanTurn, computerTurn, handHuman, handComputer, deckDealer,  humanPoints, computerPoints)
                     {
-                     handHuman.addCard(humanTurn, computerTurn, handHuman, handComputer, deckDealer,  humanPoints, computerPoints);
+                     handHuman.addCard(handComputer, deckDealer,  humanPoints, computerPoints);
                      humanTurn = false; 
                      computerTurn = true;
                     }
