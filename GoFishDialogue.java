@@ -8,14 +8,25 @@ import java.util.Scanner;
 public class GoFishDialogue
 { 
 
+static boolean cheating = true;
+static int numberToScan = 1;
+static boolean match = false;
+static boolean humanTurn = true;
+static boolean computerTurn = false;
+static int humanPoints = 0;
+static int computerPoints = 0;
+static int turnCounter = 0;
+static int difficultyLevel = 0;
+static ArrayList<Integer> humanPairedCards = new ArrayList<Integer>();
+static deckofDealer deckDealer = new deckofDealer();
+static handofHuman handHuman = new handofHuman();
+static handofComputer handComputer = new handofComputer();
 
   public static void main(String[] args)
   {
   Scanner keyboard = new Scanner(System.in);
   
-   deckofDealer deckDealer = new deckofDealer();
-   handofHuman handHuman = new handofHuman();
-   handofComputer handComputer = new handofComputer();
+
     //for (int index = 0; index < deckDealer.size(); index++) {System.out.println("deckDealer(1) has card number" + deckDealer.get(index));}  
    deckDealer.CreateDeck(); 	
    
@@ -26,26 +37,17 @@ public class GoFishDialogue
    }
    
    
-   ArrayList<Integer> humanPairedCards = new ArrayList<Integer>();
+
      
-  int numberToScan = 1;
-  boolean match = false;
-  boolean humanTurn = true;
-  boolean computerTurn = false;
-  int humanPoints = 0;
-  int computerPoints = 0;
-  int turnCounter = 0;
-  boolean cheating = true;
-  int difficultyLevel = 0;
      
       System.out.print("\nChoose difficulty level (1-99 as in percent of odds getting a correct card): ");
       difficultyLevel = keyboard.nextInt(); 
     
   
-  humanInput(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,humanPoints, computerPoints, humanPairedCards, turnCounter, difficultyLevel);
+  humanInput();
            
  }
-   public static void removeCardHumanComputer(int numberToScan, handofHuman handHuman, handofComputer handComputer, int humanPoints, int computerPoints)
+   public static void removeCardHumanComputer()
     {
     
        for (int i = 0; i < handHuman.getHand().size(); i++) 
@@ -77,7 +79,7 @@ public class GoFishDialogue
     //for (int index = 0; index < handComputer.size(); index++) {System.out.println("handComputer has card number" + handComputer.get(index));}    
     
   }
-    public static void computerInput(int numberToScan, handofHuman handHuman, handofComputer handComputer, deckofDealer deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
+    public static void computerInput()
    {
     if ( handComputer.getisEmpty() )
        {handComputer.EmptyHand(numberToScan, handHuman,handComputer, deckDealer, cheating, match, humanTurn, computerTurn,  humanPoints, computerPoints,  humanPairedCards, turnCounter, difficultyLevel);
