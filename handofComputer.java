@@ -30,24 +30,21 @@ private static ArrayList<Integer>  handComputer = new ArrayList<Integer>();
   {
      return (handComputer.size() == 0);
   }
-     public static void MatchPicked(int numberToScan, boolean match, boolean hasPicked)
+     public static void MatchPicked(int numberToScan, boolean hasPicked)
  {
             JOptionPane.showMessageDialog(null, "(computer):Do you have a " + numberToScan + "?" + "(matched)");
  }
-    public static void EmptyHand(int numberToScan, handofHuman handHuman,  handofComputer handComputer,  deckofDealer deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
+    public static void EmptyHand(handofHuman handHuman,  handofComputer handComputer,  deckofDealer deckDealer, int humanPoints, int computerPoints)
  {
      JOptionPane.showMessageDialog(null,"(computer):Empty hand, drawing card."); 
-     addCard(humanTurn, computerTurn, handHuman, handComputer, deckDealer,  humanPoints,  computerPoints);
-     humanTurn = true; 
-     computerTurn = false;
+     addCard(handHuman, handComputer, deckDealer,  humanPoints,  computerPoints);
  }
-     public static void humanEmptyHandComputerTurn(int numberToScan, handofHuman handHuman, handofComputer handComputer, deckofDealer deckDealer, boolean cheating, boolean match, boolean humanTurn, boolean computerTurn, int humanPoints, int computerPoints, ArrayList humanPairedCards, int turnCounter, int difficultyLevel)
+     public static void humanEmptyHandComputerTurn(handofHuman handHuman, handofComputer handComputer, deckofDealer deckDealer, int humanPoints, int computerPoints, ArrayList humanPairedCards)
  {
-      humanTurn = true; 
-     computerTurn = false;
-     addCard(humanTurn, computerTurn, handHuman, handComputer, deckDealer, humanPoints, computerPoints);
+
+     addCard(handHuman, handComputer, deckDealer, humanPoints, computerPoints);
  }
-  public static void addCard(boolean humanTurn, boolean computerTurn, handofHuman handHuman, handofComputer handComputer, deckofDealer deckDealer, int humanPoints, int computerPoints)
+  public static void addCard(handofHuman handHuman, handofComputer handComputer, deckofDealer deckDealer, int humanPoints, int computerPoints)
    {    
    
            deckDealer.getDeck().trimToSize(); 
