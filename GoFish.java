@@ -168,9 +168,10 @@ public class GoFish  extends JFrame implements ActionListener
          humanHand[i].setVisible(true);   
       }
       
-      pile.setText("human Pile" + fishEngine.humanPile.toString() + "\n computer Pile" + fishEngine.computerPile.toString());
-      textArea.setText(fishEngine.stringBuilder.toString());
-      feedBack.setText(fishEngine.feedBack.getText().toString());
+      pile.setText("human Pile" + fEngine.humanPile.toString() + "\n computer Pile" + fEngine.computerPile.toString());
+      textArea.setText(fEngine.stringBuilder.toString());
+      feedBack.setText(fEngine.feedBack.toString());
+      
       for(int i = 0; i < 10; i++) 
       {
          if (i > fEngine.handHuman.getHand().size() -1) 
@@ -255,7 +256,7 @@ public class GoFish  extends JFrame implements ActionListener
             String number = fEngine.gethandHuman().getHand().get(i).toString();
             humanHand[i].setText(number); //hide rest
          }
-         textArea.setText(fishEngine.feedBack.getText().toString());
+         textArea.setText(fishEngine.feedBack.toString());
       }
       else // card # button
       {
@@ -264,10 +265,11 @@ public class GoFish  extends JFrame implements ActionListener
            
             updateGUI();
             JButton button = (JButton) e.getSource();
-            System.out.println(button.getText());
-            fEngine.setScanNumber(Integer.parseInt(button.getText()));
-            fEngine.humanAlgorithm();
+            int num = Integer.parseInt(button.getText());
+            System.out.println("button clicked is " + num);
+            fEngine.numberToScan = num;
             fEngine.humanInput(); 
+            fEngine.humanAlgorithm();
             updateGUI();
             
          }
@@ -303,6 +305,9 @@ public class GoFish  extends JFrame implements ActionListener
    {
    
       fishEngine fEngine;
+      deckofDealer deckDealer;
+      handofHuman handHuman;
+      handofComputer handComputer;
       try 
       {
          
@@ -312,7 +317,21 @@ public class GoFish  extends JFrame implements ActionListener
          while (true)
          {
             fEngine = (fishEngine) sin.readObject();
+            fEngine.deckDealer = (deckofDealer) sin.readObject();
+            fEngine.handHuman = (handofHuman) sin.readObject();
+            fEngine.handComputer = (handofComputer) sin.readObject();
+            
+            fEngine.feedBack = fishEngine.feedBack;
+            
+            pile.setText("human Pile" + fishEngine.humanPile.toString() + "\n computer Pile" + fishEngine.computerPile.toString());
+            textArea.setText(fishEngine.stringBuilder.toString());
+            feedBack.setText(fishEngine.feedBack.toString());
+            //hPts.setText(String.valueOf(fishEngine.humanPoints));
+            //cPts.setText(String.valueOf(fishEngine.computerPoints));
+            //cCards.setText(" " + fEngine.deckDealer.getDeck().size() + " cards left in the deck"); 
+            sin.close();
          }
+      
       }
       catch (EOFException eof)
       {	JOptionPane.showMessageDialog(this,"File Read Successfully",
@@ -349,6 +368,9 @@ public class GoFish  extends JFrame implements ActionListener
             gFile.createNewFile();
             sout  =  new ObjectOutputStream(new FileOutputStream(gFile));
             sout.writeObject(fEngine); 
+            sout.writeObject(fEngine.deckDealer); 
+            sout.writeObject(fEngine.handHuman); 
+            sout.writeObject(fEngine.handComputer); 
             JOptionPane.showMessageDialog( this, "File " + gFile + " saved" );
             sout.close();   
          } 
