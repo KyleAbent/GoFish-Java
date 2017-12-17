@@ -160,21 +160,20 @@ public class GoFish  extends JFrame implements ActionListener
    }
    public void updateGUI()
    {
-      StringTokenizer hand = new StringTokenizer(fEngine.getHumanHandDisplay());
-     
-      int handCount = hand.countTokens();
-      System.out.println("" + hand.toString() + handCount);
-      for(int i = 0; i < handCount; i++) {
-         String number = hand.nextToken(); //errors on 0 goldfish
+      
+      for(int i = 0; i<fEngine.handHuman.getHand().size(); i++)
+      {
+         String number = fEngine.handHuman.getHand().get(i).toString(); //errors on 0 goldfish
          humanHand[i].setText(number); //hide rest
-         humanHand[i].setVisible(true);
+         humanHand[i].setVisible(true);   
       }
-      pile.setText("humanPile: " + fishEngine.humanPile.toString() + " \n computerPile:  " +  fishEngine.computerPile.toString() );
+      
+      pile.setText("human Pile" + fishEngine.humanPile.toString() + "\n computer Pile" + fishEngine.computerPile.toString());
       textArea.setText(fishEngine.stringBuilder.toString());
       feedBack.setText(fishEngine.feedBack.getText().toString());
       for(int i = 0; i < 10; i++) 
       {
-         if (i > handCount) 
+         if (i > fEngine.handHuman.getHand().size() -1) 
          {
             humanHand[i].setVisible(false);
          }
@@ -262,14 +261,14 @@ public class GoFish  extends JFrame implements ActionListener
       {
          if (fEngine.humanTurn) 
          {  
+           
             updateGUI();
             JButton button = (JButton) e.getSource();
+            System.out.println(button.getText());
             fEngine.setScanNumber(Integer.parseInt(button.getText()));
             fEngine.humanAlgorithm();
-            textArea.setText(fishEngine.stringBuilder.toString());
             fEngine.humanInput(); 
             updateGUI();
-            System.out.println(button.getText());
             
          }
          else

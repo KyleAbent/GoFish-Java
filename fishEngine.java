@@ -340,7 +340,7 @@ public class fishEngine  implements Serializable
    
       return handComputerPairedCards; 
    }
-   public    String getHumanHandDisplay()
+   public String getHumanHandDisplay()
    {
       String handHumanCards = "";
       for(int i = 0; i<handHuman.getHand().size(); i++)
@@ -352,10 +352,10 @@ public class fishEngine  implements Serializable
       return handHumanCards;
    }
    
-   public    String getComputerHandDisplay()
+   public String getComputerHandDisplay()
    {
       String handComputerCards = "";
-      for(int i = 0; i<handHuman.getHand().size(); i++)
+      for(int i = 0; i<handComputer.getHand().size(); i++)
       {
          String handCards = handComputer.getHand().get(i).toString();
          handComputerCards += handCards +" ";        
