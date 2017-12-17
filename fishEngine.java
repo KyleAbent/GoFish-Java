@@ -1,42 +1,74 @@
-//Kyle 'Avoca' Abent
 import javax.swing.JOptionPane;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import java.awt.*; 
 import java.awt.event.*;
-import javax.swing.*;  
-import javax.swing.event.*;
+import javax.swing.*;
+import java.io.*;
 
+public class fishEngine  implements Serializable
+{
 
-public class GoFishDialogue  extends JFrame
-{ 
-/////////////////////////////////////////////////////////////////////
+   /////////////////////////////////////////////////////////////////////
  /////////////////////////Declarations///////////////////////////////
 //////////////////////////////////////////////////////////////////////
-   static boolean match = false;
-   static boolean humanTurn = true;
-   static boolean computerTurn = false;
-   static int numberToScan = 0; //number chosen by human/computer to scan hands for
-   static int humanPoints = 0;
-   static int computerPoints = 0;
-   static int turnCounter = 0;
-   static boolean cheating = true; //always assume
-   static deckofDealer deckDealer = new deckofDealer();
-   static handofHuman handHuman = new handofHuman();
-   static handofComputer handComputer = new handofComputer();
-   static ArrayList<Integer> humanPairedCards = new ArrayList<Integer>();
-   static boolean gameEnd = false; //asserting turns like clocks
+   private boolean match = false;
+   protected boolean humanTurn = true;
+   private boolean computerTurn = false;
+   private int numberToScan = 0; //number chosen by human/computer to scan hands for
+   private int humanPoints = 0;
+   private int computerPoints = 0;
+   private int turnCounter = 0;
+   private boolean cheating = true; //always assume
+   protected deckofDealer deckDealer = new deckofDealer();
+   protected handofHuman handHuman = new handofHuman();
+   protected handofComputer handComputer = new handofComputer();
+   private ArrayList<Integer> humanPairedCards = new ArrayList<Integer>();//J2
+   private boolean gameEnd = false; //asserting turns like clocks
+   ///////////Obj. 2///////////////////////////
+   protected static StringBuilder stringBuilder = new StringBuilder(""); 
+   protected  JTextArea textArea = new JTextArea("", 25, 30); 
+   
+   //-------JButton------//
+   private JButton goldFishBtn = new JButton("GoldFish");
+   
+   
+   JPanel  northP = new JPanel();
+   JLabel  northTitle = new JLabel("                          Tickets Tigers Tickets            ");
+   
+   
+   ///////////Obj. 2///////////////////////////
+   
 ///////////////////////////////////////////////////////////////////////////
  /////////////////////////Declarations///////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
-
-   public static void main(String[] args)
+   public fishEngine()
    {
-      Scanner keyboard = new Scanner(System.in);
+   }
    
-     //Create deckdealer deck
+   public handofHuman gethandHuman()
+   {
+      return handHuman;
+   }
+   
+   
+   public void turnIgnition()
+   {
+       //Create deckdealer deck
+      createDeck();
+   
+   //Start turns
+      turnManage();  
+   }
+   
+   public   String getTextArea()
+   {
+      return textArea.toString();
+   }
+   //}
+   public void createDeck()
+   {
       deckDealer.CreateDeck(); 	
       for (int i = 0; i <5; i++) 
       {
@@ -44,18 +76,15 @@ public class GoFishDialogue  extends JFrame
          handofHuman.createHand(deckDealer.getDeck());
          handofComputer.createHand(deckDealer.getDeck());
       }
-   //Start turns
-      turnManage();     
    }
-
-   public static void turnManage()
+   public void turnManage()
    {  //This way the turns go back and forth matching boolean
       boolean gameOver = getisDeckDealerEmpty(); //&& handHuman.getisEmpty() && handComputer.getisEmpty();
       while(!gameOver)
       {
          gameOver = getisDeckDealerEmpty();// && handHuman.getisEmpty() && handComputer.getisEmpty();
-         if (humanTurn) { humanInput(); } 
-         else if (computerTurn) { computerInput() ; }
+         //if (humanTurn) { humanInput(); } 
+         //else if (computerTurn) { computerInput() ; }
       }
    
       if (gameOver)
@@ -72,9 +101,10 @@ public class GoFishDialogue  extends JFrame
  ///////////////////////////////////////////////////////////////////////////
  /////////////////////////human Main///////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
-   public static boolean humanInput()
+   public void humanInput()
    {
-      setScanNumber(0); 
+    
+      //setScanNumber(0); 
       match = false;
    
          //Add card so error doesn't appear!sd
@@ -88,23 +118,35 @@ public class GoFishDialogue  extends JFrame
       {
          JOptionPane.showMessageDialog(null,"deckDealer deck is empty!"); 
       }
+      
+      
    
       System.out.print("\nYour already paired cards are: " + handHumanCardsPaired());
       System.out.print("\ndeckDealer: " + deckDealer.getDeck().size() + " cards left in the deck\n" );
       System.out.println("computerPoints = " + computerPoints + " humanPoints = " + humanPoints);
       System.out.print("\n (0 to draw card, double number to place down pair)"); // or double number to trade pair for points (eg: 99 for two 9's on hand) )" + output);
       System.out.print("\nPick a card from your hand: " + getHumanHandDisplay() + " \n");
-      Scanner keyboard = new Scanner(System.in);
-      setScanNumber(keyboard.nextInt());  
+    //Change from print to GUI obj. 2 && APPEND
+      stringBuilder.append("\nYour already paired cards are: " + handHumanCardsPaired());
+      stringBuilder.append("\ndeckDealer: " + deckDealer.getDeck().size() + " cards left in the deck\n" );
+      stringBuilder.append("computerPoints = " + computerPoints + " humanPoints = " + humanPoints);
+      stringBuilder.append("\n (0 to draw card, double number to place down pair)"); // or double number to trade pair for points (eg: 99 for two 9's on hand) )" + output);
+      stringBuilder.append("\nPick a card from your hand: " + getHumanHandDisplay() + " \n");
+   //stringBuilder.append();
+      //textArea.setText(stringBuilder.toString());
+   
+      //Scanner keyboard = new Scanner(System.in);
+      //setScanNumber(keyboard.nextInt());  
       System.out.println("\nhuman chose card #" + numberToScan);
    
    
-      humanAlgorithm();
-      return getHumanTurn();
+      //humanAlgorithm();
+      //super.updateArea();
+      //return getHumanTurn();
    
     
    }
-   public static void humanAlgorithm()
+   public void humanAlgorithm()
    {
       int one = numberToScan / 10;
       int two = numberToScan % 10;
@@ -140,6 +182,11 @@ public class GoFishDialogue  extends JFrame
             computerTurn = true;
          }
       }
+      
+      if (computerTurn)
+      { 
+         computerInput() ;
+      }
               
               
           
@@ -151,13 +198,13 @@ public class GoFishDialogue  extends JFrame
  ///////////////////////////////////////////////////////////////////////////
  /////////////////////////computer Main///////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
-   public static boolean computerInput()
+   public  void computerInput()
    {
       setScanNumber(0);
       match = false;
       computerTurn = checkforEmptyHands();
-      if (!computerTurn) {
-         return computerTurn;}
+      //if (!computerTurn) {
+         //return computerTurn;}
       System.out.println("\ncomputerPoints = " + computerPoints + ", humanPoints = " + humanPoints);
       System.out.println("\nturnCounter = " + turnCounter);
        //Grab a random number based on difficulty level
@@ -170,7 +217,11 @@ public class GoFishDialogue  extends JFrame
       else{ 
          if (!match && !isZero && !getisDeckDealerEmpty()) {handComputer.addCard(handHuman, handComputer, deckDealer);} turnCounter = turnCounter + 1; humanTurn = true;computerTurn = false;}
       
-      return computerTurn;
+      //return computerTurn;
+      if (computerTurn)
+      { 
+         computerInput() ;
+      }
        
    }
   ///////////////////////////////////////////////////////////////////////////
@@ -181,7 +232,7 @@ public class GoFishDialogue  extends JFrame
  ///////////////////////////////////////////////////////////////////////////
  /////////////////////////computer Misc///////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////  
-   public static void setComputerNumber()
+   public    void setComputerNumber()
    {
       Random random = new Random();
       System.out.println("wtf");
@@ -198,7 +249,7 @@ public class GoFishDialogue  extends JFrame
          setScanNumber( random.nextInt(handComputer.getHand().size()) );
       }
    }
-   public static boolean getIsComputerMatched(boolean isZero)
+   public    boolean getIsComputerMatched(boolean isZero)
    {
        //If zero then draw card
       if (isZero && !getisDeckDealerEmpty()){System.out.println("computer is drawing card");handComputer.addCard(handHuman, handComputer, deckDealer);} 
@@ -226,7 +277,7 @@ public class GoFishDialogue  extends JFrame
  /////////////////////////human Misc///////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////  
 
-   public static String handHumanCardsPaired()
+   public    String handHumanCardsPaired()
    {
      
       String handHumanCardsPaired = "";
@@ -238,7 +289,7 @@ public class GoFishDialogue  extends JFrame
    
       return handHumanCardsPaired; 
    }
-   public static String getHumanHandDisplay()
+   public    String getHumanHandDisplay()
    {
       String handHumanCards = "";
       for(int i = 0; i<handHuman.getHand().size(); i++)
@@ -249,7 +300,7 @@ public class GoFishDialogue  extends JFrame
    
       return handHumanCards;
    }
-   public static boolean getIsHumanCheating()
+   public    boolean getIsHumanCheating()
    {
       cheating = true;
       for (int i = 0; i < handHuman.getHand().size(); i++) 
@@ -260,7 +311,7 @@ public class GoFishDialogue  extends JFrame
       if (cheating) {JOptionPane.showMessageDialog(null,"You are cheating. You do not own card # " + numberToScan + "! Try Again!");  }
       return cheating;
    }
-   public static void humanPairNonCheating(int one, int two)
+   public    void humanPairNonCheating(int one, int two)
    {
    
       handHuman.removePair(one, two); 
@@ -269,7 +320,7 @@ public class GoFishDialogue  extends JFrame
                // setComputerTurn(true); 
       humanPairedCards.add( one ); humanPairedCards.add( two );
    }
-   public static boolean getIsHumanMatch(boolean isZero)
+   public    boolean getIsHumanMatch(boolean isZero)
    {
       boolean isMatch = false;
       for (int i = 0; i < handComputer.getHand().size(); i++) 
@@ -290,7 +341,7 @@ public class GoFishDialogue  extends JFrame
  ///////////////////////// Misc///////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////// 
 
-   public static void removeCardHumanComputer()
+   public void removeCardHumanComputer()
    {
     
       for (int i = 0; i < handHuman.getHand().size(); i++) 
@@ -315,7 +366,7 @@ public class GoFishDialogue  extends JFrame
          }
       }                  
    }
-   public static boolean checkforEmptyHands()
+   public  boolean checkforEmptyHands()
    {
       boolean continueTurn = true;
       if ( handComputer.getisEmpty() )
@@ -330,39 +381,39 @@ public class GoFishDialogue  extends JFrame
       return continueTurn;
    }
   
-   public static int getScanNumber()
+   public    int getScanNumber()
    {
       return numberToScan;
    }
-   public static void setScanNumber(int num)
+   public    void setScanNumber(int num)
    {
       numberToScan = num;
    }
-   public static boolean getHumanTurn()
+   public    boolean getHumanTurn()
    {
       return humanTurn;
    }
-   public static void setHumanTurn(boolean bool)
+   public    void setHumanTurn(boolean bool)
    {
       humanTurn = bool;
    }
-   public static boolean getComputerTurn()
+   public    boolean getComputerTurn()
    {
       return computerTurn;
    }
-   public static void setComputerTurn(boolean bool)
+   public    void setComputerTurn(boolean bool)
    {
       computerTurn = bool;
    }
-   public static boolean getisDeckDealerEmpty()
+   public    boolean getisDeckDealerEmpty()
    {
       return deckDealer.getisEmpty();
    }
+   
+}
+
 
  ///////////////////////////////////////////////////////////////////////////
  ///////////////////////// Misc///////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////// 
 
-  
-
-}

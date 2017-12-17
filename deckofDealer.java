@@ -1,33 +1,34 @@
 import java.util.ArrayList;
 import java.util.Random;
-public class deckofDealer
+import java.io.Serializable;
+public class deckofDealer implements Serializable
 {
-private double length;
-private static ArrayList<Integer> deckDealer = new ArrayList<Integer>();
+   private double length;
+   private static ArrayList<Integer> deckDealer = new ArrayList<Integer>();
     
     
-  public static void main(String[] args)
-  {
-  }
-  
-  public static void CreateDeck()
-  {  //A, J, K, Q??
-     for (int index = 0; index <= 4; index++)
+   public static void main(String[] args)
    {
-    deckDealer.add(1);deckDealer.add(2);deckDealer.add(3);deckDealer.add(4);deckDealer.add(5);
-    deckDealer.add(6);deckDealer.add(7);deckDealer.add(8);deckDealer.add(9);deckDealer.add(10);
    }
+  
+   public static void CreateDeck()
+   {  //A, J, K, Q??
+      for (int index = 0; index <= 4; index++)
+      {
+         deckDealer.add(1);deckDealer.add(2);deckDealer.add(3);deckDealer.add(4);deckDealer.add(5);
+         deckDealer.add(6);deckDealer.add(7);deckDealer.add(8);deckDealer.add(9);deckDealer.add(10);
+      }
    
-  }
+   }
   
-  public static ArrayList getDeck()
-  {
-   return deckDealer;
-  } 
+   public static ArrayList getDeck()
+   {
+      return deckDealer;
+   } 
   
- public static boolean getisEmpty()
-  {
-     return (deckDealer.size() == 0);
-  }
+   public static boolean getisEmpty()
+   {
+      return (deckDealer.size() == 0);
+   }
   
 }
