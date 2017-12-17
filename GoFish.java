@@ -36,15 +36,32 @@ public class GoFish  extends JFrame implements ActionListener
    private ObjectInputStream sin;
    fishEngine fEngine = new fishEngine();
    private JTextArea textArea = new JTextArea("", 25, 30); 
+   protected  JTextArea feedBack = new JTextArea("", 25, 30); 
+   protected  JTextArea pile = new JTextArea("", 25, 30); 
    
-   private JButton endTurn = new JButton("endTurn");
+   private JButton endTurn = new JButton("GoFish");
    private JButton newGame = new JButton("newGame");
    
    
    JScrollPane  scroll = new JScrollPane(textArea);
+   JScrollPane  scrollTwo = new JScrollPane(feedBack);
+   JScrollPane  scrollThree = new JScrollPane(pile);
    
    
    JButton[] humanHand = new JButton[10];
+   //JButton[] humanPile = new JButton[45];
+   //JButton[] computerPile = new JButton[45]; 
+   
+   JLabel  cCards = new JLabel("45 cards left in the deck");  
+   JLabel  eTitle = new JLabel("Computer Pts:)");   
+   JLabel  cPts = new JLabel(" "); 
+   JLabel  wTitle = new JLabel("Human Pts:)"); 
+   JLabel  hPts = new JLabel(" "); 
+   private JCheckBox dbg = new JCheckBox("debug"); 
+ 
+   
+    
+    
    
    
    public static void main(String[] args)
@@ -77,18 +94,25 @@ public class GoFish  extends JFrame implements ActionListener
       
       jmb.add(aboutM);
       jmb.add(gameM);
+      northP.add(dbg);
+      CheckBoxListener myCheckBoxListener = new CheckBoxListener();
+      dbg.addItemListener(myCheckBoxListener);
+      dbg.setSelected(false);
       northP.add(jmb);
       
-      centerP.setLayout(new GridLayout(3,1)); // 2, 2
+      centerP.setLayout(new GridLayout(2,2)); // 2, 2
       centerP.add(scroll);
-      //centerP.add(endTurn);
-      endTurn.addActionListener(this);
-      centerP.add(newGame);
+      centerP.add(scrollTwo);
+      centerP.add(scrollThree);
+      centerP.add(cCards);
+   
+      //centerP.add(newGame);
       newGame.addActionListener(this);
       
       southP.setLayout(new GridLayout(10,1)); // 2, 2
       
-      
+      eastP.setLayout(new GridLayout(4,1)); // 4,1 GridBagLayout??
+      westP.setLayout(new GridLayout(4,1)); // 4,1 GridBagLayout??
       
       northP.setLayout(new FlowLayout());
       myContainer.add(northP, BorderLayout.NORTH);
@@ -100,32 +124,95 @@ public class GoFish  extends JFrame implements ActionListener
       //myContainer.add(goldFishBtn);
       //System.out.println("c = " + myContainer + " humanPoints = " + humanPoints); 
       //fEngine.turnIgnition(); 
-      
+      southP.add(endTurn);
+      endTurn.addActionListener(this);
       for(int i = 0; i < 10; i++) {
          humanHand[i] = new JButton(String.valueOf(i));
          southP.add(humanHand[i]);
          humanHand[i].addActionListener(this);
       }
       
+      westP.add(wTitle);
+      westP.add(hPts);
+      westP.setLayout(new GridLayout(4,5));
+      /*
+      for(int i = 0; i < 15; i++) {
+         humanPile[i] = new JButton(String.valueOf(i));
+         westP.add(humanPile[i]);
+         //humanPile[i].setVisible(false);
+      }
+      */
+      eastP.add(eTitle);
+     
+      eastP.add(cPts);
+      eastP.setLayout(new GridLayout(4,5));
+      
+   
+      /*
+      for(int i = 0; i < 15; i++) {
+         computerPile[i] = new JButton(String.valueOf(i));
+         eastP.add(computerPile[i]);
+         //humanPile[i].setVisible(false);
+      }
+      */
+   
      
    }
-   public void updateHumanHand()
+   public void updateGUI()
    {
       StringTokenizer hand = new StringTokenizer(fEngine.getHumanHandDisplay());
      
       int handCount = hand.countTokens();
       System.out.println("" + hand.toString() + handCount);
       for(int i = 0; i < handCount; i++) {
-         String number = hand.nextToken();
+         String number = hand.nextToken(); //errors on 0 goldfish
          humanHand[i].setText(number); //hide rest
          humanHand[i].setVisible(true);
       }
-      for(int i = 0; i < 10; i++) {
+      pile.setText("humanPile: " + fishEngine.humanPile.toString() + " \n computerPile:  " +  fishEngine.computerPile.toString() );
+      textArea.setText(fishEngine.stringBuilder.toString());
+      feedBack.setText(fishEngine.feedBack.getText().toString());
+      for(int i = 0; i < 10; i++) 
+      {
          if (i > handCount) 
          {
             humanHand[i].setVisible(false);
          }
+      }  
+      hPts.setText(String.valueOf(fEngine.humanPoints));
+      cPts.setText(String.valueOf(fEngine.computerPoints));
+      cCards.setText(" " + fEngine.deckDealer.getDeck().size() + " cards left in the deck");  
+   //   System.out.print("\ndeckDealer: " + deckDealer.getDeck().size() + " cards left in the deck\n" );
+   
+      /*
+      for(int i = 0; i < fEngine.ComputerPairedCards.size(); i++) 
+      {
+         String number = String.valueOf(fEngine.ComputerPairedCards.get(i));
+         computerPile[i].setText(number); //hide rest
+         computerPile[i].setVisible(true);
       }
+      for(int i = 0; i < fEngine.humanPairedCards.size(); i++) 
+      {
+         String number = String.valueOf(fEngine.humanPairedCards.get(i));
+         humanPile[i].setText(number); //hide rest
+         humanPile[i].setVisible(true);
+      }
+   
+      for(int i = 0; i < 15; i++) 
+      {
+         if (i > fEngine.ComputerPairedCards.size()) 
+         {
+            computerPile[i].setVisible(false);
+         }
+      }
+      for(int i = 0; i < 15; i++)
+      {
+         if (i > fEngine.humanPairedCards.size()) 
+         {
+            humanPile[i].setVisible(false);
+         }
+      }
+      */
    }
    public void actionPerformed(ActionEvent e)
    {
@@ -138,8 +225,8 @@ public class GoFish  extends JFrame implements ActionListener
       else if (e.getSource() == LoadG)
       {
          ReadBSAFile();
-         textArea.setText(fishEngine.stringBuilder.toString());
-         updateHumanHand();
+      
+         updateGUI();
       }
       else if (e.getSource() == saveGame)
       {
@@ -151,7 +238,12 @@ public class GoFish  extends JFrame implements ActionListener
       }
       else if (e.getSource() == endTurn)
       {
-         fEngine.turnManage(); 
+         updateGUI();
+         fEngine.setScanNumber(0);
+         fEngine.humanAlgorithm();
+         fEngine.humanInput(); 
+         updateGUI();
+         System.out.println("GoFish");
       }
       else if (e.getSource() == newGame)
       {
@@ -164,25 +256,26 @@ public class GoFish  extends JFrame implements ActionListener
             String number = fEngine.gethandHuman().getHand().get(i).toString();
             humanHand[i].setText(number); //hide rest
          }
-         textArea.setText(fishEngine.stringBuilder.toString());
+         textArea.setText(fishEngine.feedBack.getText().toString());
       }
       else // card # button
       {
          if (fEngine.humanTurn) 
          {  
-            updateHumanHand();
+            updateGUI();
             JButton button = (JButton) e.getSource();
             fEngine.setScanNumber(Integer.parseInt(button.getText()));
             fEngine.humanAlgorithm();
-            updateHumanHand();
             textArea.setText(fishEngine.stringBuilder.toString());
             fEngine.humanInput(); 
+            updateGUI();
             System.out.println(button.getText());
+            
          }
          else
          {
             JButton button = (JButton) e.getSource();
-            updateHumanHand();
+            updateGUI();
             System.out.println(button.getText());
          }
       }
@@ -277,6 +370,19 @@ public class GoFish  extends JFrame implements ActionListener
       }
    
    }
+   
+   public class CheckBoxListener implements ItemListener
+   {  
+      public void itemStateChanged(ItemEvent e)
+      {	// process checkbox events
+         if ( e.getSource() == dbg )	
+         {
+            dbg.setSelected(false);
+            System.out.println(fEngine.getComputerHandDisplay());
+         }
+      }
+   }
+   
    
 }
    

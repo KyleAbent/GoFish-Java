@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JOptionPane;
-   import java.io.Serializable;
+import java.io.Serializable;
 public class handofComputer implements Serializable
 
 
@@ -31,13 +31,15 @@ public class handofComputer implements Serializable
    {
       return (handComputer.size() == 0);
    }
+   /*
    public static void MatchPicked(int numberToScan, boolean hasPicked)
    {
       JOptionPane.showMessageDialog(null, "(computer):Do you have a " + numberToScan + "?" + "(matched)");
    }
+   */
    public static void EmptyHand(handofHuman handHuman,  handofComputer handComputer,  deckofDealer deckDealer)
    {
-      JOptionPane.showMessageDialog(null,"(computer):Empty hand, drawing card."); 
+      //JOptionPane.showMessageDialog(null,"(computer):Empty hand, drawing card."); 
       addCard(handHuman, handComputer, deckDealer);
    }
    public static void humanEmptyHandComputerTurn(handofHuman handHuman, handofComputer handComputer, deckofDealer deckDealer)
@@ -63,7 +65,7 @@ public class handofComputer implements Serializable
        
       getHand().add( temp );
            // System.out.println("handComputer added card # " + temp);
-      JOptionPane.showMessageDialog(null, "GoFish! (computerTurn)");
+      //JOptionPane.showMessageDialog(null, "GoFish! (computerTurn)");
       System.out.println("GoFish! (computerTurn)");
       return;
    }
@@ -102,7 +104,10 @@ public class handofComputer implements Serializable
    }
    public static void removePairHuman(int one, int two, ArrayList handHuman)
    {
-      {JOptionPane.showMessageDialog(null,"removing pairs " + one + two); }
+      {
+     // JOptionPane.showMessageDialog(null,"removing pairs " + one + two);
+       }
+       
       for (int i = 0; i < handHuman.size(); i++) 
       {
       //  System.out.println("removeCardHumanComputer handHuman NumberToScan is" + numberToScan + "index number is " + handHuman.get(i) ); 

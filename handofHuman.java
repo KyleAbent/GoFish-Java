@@ -28,11 +28,13 @@ public class handofHuman implements Serializable
    {
       return (handHuman.size() == 0);
    }
+   
    public static void EmptyHand(handofHuman handHuman,  handofComputer handComputer,  deckofDealer deckDealer)
    {
-      JOptionPane.showMessageDialog(null,"Empty hand, drawing card."); 
+      //JOptionPane.showMessageDialog(null,"Empty hand, drawing card."); 
       addCard(handComputer,deckDealer);
    }
+   
    public static void addCard(handofComputer handComputer, deckofDealer deckDealer)
    {    
    
@@ -51,7 +53,7 @@ public class handofHuman implements Serializable
                    
       handHuman.add( value );
       System.out.println("handHuman added card # " + value);
-      JOptionPane.showMessageDialog(null, "GoFish! (humanTurn)");
+      //JOptionPane.showMessageDialog(null, "GoFish! (humanTurn)");
       System.out.println("GoFish! (humanTurn)");
    }
    
