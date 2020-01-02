@@ -238,7 +238,6 @@ public class GoFish  extends JFrame implements ActionListener
       }
       else if (e.getSource() == endTurn)
       {
-         System.out.println("dsds New Game Selected");
          updateGUI();
          fEngine.setScanNumber(0);
          fEngine.humanAlgorithm();
@@ -248,7 +247,6 @@ public class GoFish  extends JFrame implements ActionListener
       }
       else if (e.getSource() == newGame)
       {
-         System.out.println("New Game Selected");
          //fEngine.turnIgnition(); 
          //fishEngine fEngine = new fishEngine();
          //fEngine.turnIgnition();
