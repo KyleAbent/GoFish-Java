@@ -164,9 +164,27 @@ public class GoFish  extends JFrame implements ActionListener
       
       for(int i = 0; i<fEngine.handHuman.getHand().size(); i++)
       {
-         String number = fEngine.handHuman.getHand().get(i).toString(); //errors on 0 goldfish
+         String number = fEngine.handHuman.getHand().get(i).toString(); 
          humanHand[i].setText(number); //hide rest
          humanHand[i].setVisible(true);   
+         humanHand[i].setBackground(null);
+
+      }
+      
+      
+       for(int i = 0; i<fEngine.handHuman.getHand().size(); i++)
+      {
+         //check for duplicates
+         for (int j = i + 1; j < fEngine.handHuman.getHand().size(); j ++){
+             //System.out.println("humanHand[i] is " + humanHand[i].getText());
+             //System.out.println("humanHand[j] is " + humanHand[j].getText());
+             if (humanHand[i].isVisible() && humanHand[i].getText().equals((humanHand[j].getText()))) {
+                 System.out.println("Found Matching Numbers: " + humanHand[i].getText());
+                 humanHand[i].setBackground(Color.RED);
+                 humanHand[j].setBackground(Color.RED);
+             }
+         }
+         
       }
       
       pile.setText("human Pile" + fEngine.humanPile.toString() + "\n computer Pile" + fEngine.computerPile.toString());
@@ -178,6 +196,7 @@ public class GoFish  extends JFrame implements ActionListener
          if (i > fEngine.handHuman.getHand().size() -1) 
          {
             humanHand[i].setVisible(false);
+            humanHand[i].setBackground(null);
          }
       }  
       hPts.setText(String.valueOf(fEngine.humanPoints));
@@ -274,7 +293,7 @@ public class GoFish  extends JFrame implements ActionListener
       {
          if (fEngine.humanTurn) 
          {  
-           
+           //Check for duplicates
             updateGUI();
             JButton button = (JButton) e.getSource();
             int num = Integer.parseInt(button.getText());
@@ -323,22 +342,8 @@ public class GoFish  extends JFrame implements ActionListener
          FileInputStream fis = new FileInputStream(gFile);
          sin  =  new ObjectInputStream(fis);
          System.out.println("dsds Load Game Selected");
-         //fEngine.deckDealer.ResetDeck();
-         //fEngine.handComputer.resetHand();
-         //fEngine.handHuman.resetHand();
-         //fEngine.createDeck();
-         //fEngine.resetFeedbacks();
-         //fEngine.humanPoints = 0;
-         //fEngine.computerPoints = 0;
-        //updateGUI();
         
         fishEngine fEngineRead;
-        //deckofDealer deckDealerRead;
-        //handofHuman handHumanRead;
-        //handofComputer handComputerRead;
-      
-         ////while (true)
-         //{
             fEngineRead = (fishEngine) sin.readObject();
             deckofDealer.deckDealer = (ArrayList) sin.readObject();
             handofHuman.handHuman = (ArrayList) sin.readObject();
@@ -348,7 +353,6 @@ public class GoFish  extends JFrame implements ActionListener
             fEngineRead.humanPile.append ( (String) sin.readUTF() );
             fEngineRead.computerPile.append ( (String) sin.readUTF() );
             fEngineRead.stringBuilder.append( (String) sin.readUTF() );
-            
             
             fEngine = fEngineRead;
             fEngine.deckDealer = fEngineRead.deckDealer;
@@ -361,7 +365,6 @@ public class GoFish  extends JFrame implements ActionListener
 
             sin.close();
             updateGUI();
-         //}
       
       }
       catch (EOFException eof)
