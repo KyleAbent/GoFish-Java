@@ -12,6 +12,7 @@ public class handofComputer implements Serializable
    {
    }
   
+  
    public static void createHand(ArrayList deckDealer)
    {
       
@@ -22,6 +23,7 @@ public class handofComputer implements Serializable
       deckDealer.remove( deckDealer.get( idx) ); //object not int
       handComputer.add( value );
       deckDealer.trimToSize();
+      System.out.println("Computer added card" + value);
    }
    public static ArrayList getHand()
    {
@@ -63,10 +65,11 @@ public class handofComputer implements Serializable
       deckDealer.getDeck().trimToSize();  
       // System.out.println("deckDealer removed card # " + temp);
        
-      getHand().add( temp );
+      getHand().add( value );
            // System.out.println("handComputer added card # " + temp);
       //JOptionPane.showMessageDialog(null, "GoFish! (computerTurn)");
       System.out.println("GoFish! (computerTurn)");
+      System.out.println("Computer added card" + value);
       return;
    }
    
@@ -105,8 +108,8 @@ public class handofComputer implements Serializable
    public static void removePairHuman(int one, int two, ArrayList handHuman)
    {
       {
-     // JOptionPane.showMessageDialog(null,"removing pairs " + one + two);
-       }
+      // JOptionPane.showMessageDialog(null,"removing pairs " + one + two);
+      }
        
       for (int i = 0; i < handHuman.size(); i++) 
       {
