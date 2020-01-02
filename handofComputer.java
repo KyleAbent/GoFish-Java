@@ -6,7 +6,7 @@ public class handofComputer implements Serializable
 
 
 {
-   private static ArrayList<Integer>  handComputer = new ArrayList<Integer>();
+   protected static ArrayList<Integer>  handComputer = new ArrayList<Integer>();
 
    public static void main(String[] args)
    {
@@ -25,11 +25,14 @@ public class handofComputer implements Serializable
       deckDealer.trimToSize();
       System.out.println("Computer added card" + value);
    }
-   public static ArrayList getHand()
+   public void resetHand(){
+       handComputer = new ArrayList<Integer>();
+   }
+   public ArrayList getHand()
    {
       return handComputer;
    }
-   public static boolean getisEmpty()
+   public boolean getisEmpty()
    {
       return (handComputer.size() == 0);
    }
@@ -39,17 +42,17 @@ public class handofComputer implements Serializable
       JOptionPane.showMessageDialog(null, "(computer):Do you have a " + numberToScan + "?" + "(matched)");
    }
    */
-   public static void EmptyHand(handofHuman handHuman,  handofComputer handComputer,  deckofDealer deckDealer)
+   public void EmptyHand(handofHuman handHuman,  handofComputer handComputer,  deckofDealer deckDealer)
    {
       //JOptionPane.showMessageDialog(null,"(computer):Empty hand, drawing card."); 
       addCard(handHuman, handComputer, deckDealer);
    }
-   public static void humanEmptyHandComputerTurn(handofHuman handHuman, handofComputer handComputer, deckofDealer deckDealer)
+   public void humanEmptyHandComputerTurn(handofHuman handHuman, handofComputer handComputer, deckofDealer deckDealer)
    {
    
       addCard(handHuman, handComputer, deckDealer);
    }
-   public static void addCard(handofHuman handHuman, handofComputer handComputer, deckofDealer deckDealer)
+   public void addCard(handofHuman handHuman, handofComputer handComputer, deckofDealer deckDealer)
    {    
    
       deckDealer.getDeck().trimToSize(); 
@@ -73,7 +76,7 @@ public class handofComputer implements Serializable
       return;
    }
    
-   public static void removeCard(int numberToScan, ArrayList handHuman, ArrayList handComputer)
+   public void removeCard(int numberToScan, ArrayList handHuman, ArrayList handComputer)
    {
     
       for (int i = 0; i < handHuman.size(); i++) 
@@ -105,7 +108,7 @@ public class handofComputer implements Serializable
     //for (int index = 0; index < handComputer.size(); index++) {System.out.println("handComputer has card number" + handComputer.get(index));}    
     
    }
-   public static void removePairHuman(int one, int two, ArrayList handHuman)
+   public void removePairHuman(int one, int two, ArrayList handHuman)
    {
       {
       // JOptionPane.showMessageDialog(null,"removing pairs " + one + two);

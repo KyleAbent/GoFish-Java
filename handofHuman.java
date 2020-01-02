@@ -5,10 +5,13 @@ import java.io.Serializable;
 
 public class handofHuman implements Serializable
 {
-   private static ArrayList<Integer>  handHuman = new ArrayList<Integer>();
+   protected static ArrayList<Integer>  handHuman = new ArrayList<Integer>();
 
    public static void main(String[] args)
    {
+   }
+   public void resetHand(){
+       handHuman = new ArrayList<Integer>();
    }
    public static void createHand(ArrayList deckDealer)
    {

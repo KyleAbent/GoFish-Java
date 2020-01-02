@@ -3,15 +3,19 @@ import java.util.Random;
 import java.io.Serializable;
 public class deckofDealer implements Serializable
 {
-   private double length;
-   private static ArrayList<Integer> deckDealer = new ArrayList<Integer>();
+   protected static ArrayList<Integer> deckDealer = new ArrayList<Integer>();
     
     
    public static void main(String[] args)
    {
    }
   
-   public static void CreateDeck()
+   public void ResetDeck()
+   { 
+     deckDealer = new ArrayList<Integer>();
+   }
+   
+   public void CreateDeck()
    {  //A, J, K, Q??
       for (int index = 0; index <= 4; index++)
       {
@@ -21,12 +25,12 @@ public class deckofDealer implements Serializable
    
    }
   
-   public static ArrayList getDeck()
+   public ArrayList getDeck()
    {
       return deckDealer;
    } 
   
-   public static boolean getisEmpty()
+   public boolean getisEmpty()
    {
       return (deckDealer.size() == 0);
    }

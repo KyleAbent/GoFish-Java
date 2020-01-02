@@ -1,4 +1,5 @@
 //Kyle 'Avoca' Abent loves his grandma Rose 'Howard St' Abent.
+import static fishEngine.stringBuilder;
 import javax.swing.JOptionPane;
 import java.util.Random;
 import java.util.ArrayList;
@@ -73,13 +74,13 @@ public class GoFish  extends JFrame implements ActionListener
       GF.setVisible(true);
       GF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
       fishEngine fEngine = new fishEngine();
-      fEngine.turnIgnition();
+      
       
    }
  
    
    public GoFish()       {
-   
+      fEngine.turnIgnition();
       Container myContainer = getContentPane();
       myContainer.setLayout(new BorderLayout());
       setTitle("Go Fish"); 
@@ -235,10 +236,19 @@ public class GoFish  extends JFrame implements ActionListener
       else if (e.getSource() == newF)
       {
          //fEngine.turnIgnition(); 
+        System.out.println("dsds New Game Selected");
+        fEngine.deckDealer.ResetDeck();
+        fEngine.handComputer.resetHand();
+        fEngine.handHuman.resetHand();
+        fEngine.createDeck();
+        fEngine.resetFeedbacks();
+        fEngine.humanPoints = 0;
+        fEngine.computerPoints = 0;
+        updateGUI();
       }
       else if (e.getSource() == endTurn)
       {
-         System.out.println("dsds New Game Selected");
+         
          updateGUI();
          fEngine.setScanNumber(0);
          fEngine.humanAlgorithm();
@@ -306,33 +316,52 @@ public class GoFish  extends JFrame implements ActionListener
    public void ReadBSAFile()
    {
    
-      fishEngine fEngine;
-      deckofDealer deckDealer;
-      handofHuman handHuman;
-      handofComputer handComputer;
+
       try 
       {
          
          FileInputStream fis = new FileInputStream(gFile);
          sin  =  new ObjectInputStream(fis);
+         System.out.println("dsds Load Game Selected");
+         //fEngine.deckDealer.ResetDeck();
+         //fEngine.handComputer.resetHand();
+         //fEngine.handHuman.resetHand();
+         //fEngine.createDeck();
+         //fEngine.resetFeedbacks();
+         //fEngine.humanPoints = 0;
+         //fEngine.computerPoints = 0;
+        //updateGUI();
+        
+        fishEngine fEngineRead;
+        //deckofDealer deckDealerRead;
+        //handofHuman handHumanRead;
+        //handofComputer handComputerRead;
       
-         while (true)
-         {
-            fEngine = (fishEngine) sin.readObject();
-            fEngine.deckDealer = (deckofDealer) sin.readObject();
-            fEngine.handHuman = (handofHuman) sin.readObject();
-            fEngine.handComputer = (handofComputer) sin.readObject();
+         ////while (true)
+         //{
+            fEngineRead = (fishEngine) sin.readObject();
+            deckofDealer.deckDealer = (ArrayList) sin.readObject();
+            handofHuman.handHuman = (ArrayList) sin.readObject();
+            handofComputer.handComputer = (ArrayList) sin.readObject();
+            fEngineRead.feedBack = new StringBuilder();
+            fEngineRead.feedBack.append ( (String) sin.readUTF() );
+            fEngineRead.humanPile.append ( (String) sin.readUTF() );
+            fEngineRead.computerPile.append ( (String) sin.readUTF() );
+            fEngineRead.stringBuilder.append( (String) sin.readUTF() );
             
-            fEngine.feedBack = fishEngine.feedBack;
             
-            pile.setText("human Pile" + fishEngine.humanPile.toString() + "\n computer Pile" + fishEngine.computerPile.toString());
-            textArea.setText(fishEngine.stringBuilder.toString());
-            feedBack.setText(fishEngine.feedBack.toString());
-            //hPts.setText(String.valueOf(fishEngine.humanPoints));
-            //cPts.setText(String.valueOf(fishEngine.computerPoints));
-            //cCards.setText(" " + fEngine.deckDealer.getDeck().size() + " cards left in the deck"); 
+            fEngine = fEngineRead;
+            fEngine.deckDealer = fEngineRead.deckDealer;
+            fEngine.handHuman = fEngineRead.handHuman;
+            fEngine.handComputer = fEngineRead.handComputer;
+            fEngine.feedBack = fEngineRead.feedBack;
+            fEngine.humanPile = fEngineRead.humanPile;
+            fEngine.computerPile = fEngineRead.computerPile;
+            fEngine.stringBuilder = fEngineRead.stringBuilder;
+
             sin.close();
-         }
+            updateGUI();
+         //}
       
       }
       catch (EOFException eof)
@@ -370,9 +399,13 @@ public class GoFish  extends JFrame implements ActionListener
             gFile.createNewFile();
             sout  =  new ObjectOutputStream(new FileOutputStream(gFile));
             sout.writeObject(fEngine); 
-            sout.writeObject(fEngine.deckDealer); 
-            sout.writeObject(fEngine.handHuman); 
-            sout.writeObject(fEngine.handComputer); 
+            sout.writeObject(deckofDealer.deckDealer); 
+            sout.writeObject(handofHuman.handHuman); 
+            sout.writeObject(handofComputer.handComputer); 
+            sout.writeUTF(fEngine.feedBack.toString());
+            sout.writeUTF(fEngine.humanPile.toString());
+            sout.writeUTF(fEngine.computerPile.toString());
+            sout.writeUTF(fEngine.stringBuilder.toString());
             JOptionPane.showMessageDialog( this, "File " + gFile + " saved" );
             sout.close();   
          } 

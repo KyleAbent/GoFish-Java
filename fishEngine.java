@@ -53,6 +53,17 @@ public class fishEngine  implements Serializable
    {
    }
    
+   public void resetFeedbacks(){
+        feedBack = new StringBuilder();
+        humanPile = new StringBuilder(""); 
+        computerPile = new StringBuilder(""); 
+        stringBuilder = new StringBuilder(""); 
+        StringBuilder computerPile = new StringBuilder(""); 
+        humanPairedCards = new ArrayList<Integer>();
+        ComputerPairedCards = new ArrayList<Integer>();
+   }
+   
+   
    public handofHuman gethandHuman()
    {
       return handHuman;
