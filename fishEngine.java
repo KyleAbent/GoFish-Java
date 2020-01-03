@@ -214,7 +214,7 @@ public class fishEngine  implements Serializable
       turnManage();
       setScanNumber(0);
       match = false;
-      computerTurn = checkforEmptyHands();
+      computerTurn = checkforEmptyHands(false); // Not sure about this logic why not just add card then proceed o_O hm we'll see eh
       //if (!computerTurn) {
          //return computerTurn;}
       System.out.println("\ncomputerPoints = " + computerPoints + ", humanPoints = " + humanPoints);
@@ -284,10 +284,16 @@ public class fishEngine  implements Serializable
           //java.lang.IllegalArgumentException: bound must be positive
           //Check for if computer hand is empty haha.
           //SUPER RARE bug ! What are the odds? ?!!
+          if ( checkforEmptyHands(true) ){ // and not deck dealer deck empty? hm.
+              handComputer.addCard(handHuman, handComputer, deckDealer);
+              feedBack.append("\n"+"["+turnCounter+"] "+"Computer Hand Empty, Drawing Card");
+              
+          }
+          
          setScanNumber( random.nextInt(handComputer.getHand().size()) ); 
       }
    }
-   public    boolean getIsComputerMatched(boolean isZero)
+   public boolean getIsComputerMatched(boolean isZero)
    {
        //If zero then draw card
       if (isZero && !getisDeckDealerEmpty())
@@ -435,15 +441,15 @@ public class fishEngine  implements Serializable
          }
       }                  
    }
-   public  boolean checkforEmptyHands()
+   public  boolean checkforEmptyHands(boolean computerOnly)
    {
       boolean continueTurn = true;
-      if ( handComputer.getisEmpty() )
+      if ( handComputer.getisEmpty() ) // computerOnly
       {
          feedBack.append("\n(computer):Empty hand, drawing card."); 
          continueTurn = false;
       }
-      if  ( handHuman.getisEmpty() )
+      if  ( !computerOnly && handHuman.getisEmpty() )
       {
          handHuman.EmptyHand(handHuman,handComputer, deckDealer);
          continueTurn = false;
