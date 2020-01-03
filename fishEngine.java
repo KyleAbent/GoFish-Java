@@ -19,7 +19,7 @@ public class fishEngine  implements Serializable
    protected int numberToScan = 0; //number chosen by human/computer to scan hands for
    protected int humanPoints = 0;
    protected int computerPoints = 0;
-   private int turnCounter = 0;
+   protected int turnCounter = 1; //Starts at 1!
    private boolean cheating = true; //always assume
    protected deckofDealer deckDealer = new deckofDealer();
    protected handofHuman handHuman = new handofHuman();
@@ -29,7 +29,7 @@ public class fishEngine  implements Serializable
    protected static ArrayList<Integer> ComputerPairedCards = new ArrayList<Integer>();//J2
    private boolean gameEnd = false; //asserting turns like clocks
    ///////////Obj. 2///////////////////////////
-   protected static StringBuilder stringBuilder = new StringBuilder(""); 
+   protected static StringBuilder turnCounterFB = new StringBuilder(""); 
    protected  JTextArea textArea = new JTextArea("", 25, 30); 
    
    protected  static StringBuilder feedBack = new StringBuilder(); 
@@ -57,7 +57,7 @@ public class fishEngine  implements Serializable
         feedBack = new StringBuilder();
         humanPile = new StringBuilder(""); 
         computerPile = new StringBuilder(""); 
-        stringBuilder = new StringBuilder(""); 
+        turnCounterFB = new StringBuilder(""); 
         StringBuilder computerPile = new StringBuilder(""); 
         humanPairedCards = new ArrayList<Integer>();
         ComputerPairedCards = new ArrayList<Integer>();
@@ -106,12 +106,14 @@ public class fishEngine  implements Serializable
    
       if (gameOver)
       {
+          /*
          feedBack.append("\n!!Game Over!! (Warning 1 of 4)"); 
          feedBack.append("\n!!Game Over!! (Warning 2 of 4)"); 
          feedBack.append("\n!!Game Over!! (Warning 3 of 4)"); 
          feedBack.append("\n!!Game Over!! (Warning 4 of 4)"); 
          feedBack.append("\nhumanPoints = " + humanPoints + " , computerPoints = " + computerPoints); 
          //System.exit(0);
+        */
       }
    
    }
@@ -121,91 +123,52 @@ public class fishEngine  implements Serializable
    public void humanInput()
    {
       turnManage();
-      //setScanNumber(0); 
-      match = false;
-   
-         //Add card so error doesn't appear!sd
-      if  ( handHuman.getisEmpty() && !getisDeckDealerEmpty() )
-      { 
-         //handHuman.EmptyHand(handHuman,handComputer, deckDealer);
+
+      if  ( handHuman.getisEmpty() && !getisDeckDealerEmpty()){ 
          feedBack.append( "\nEmpty hand, drawing card."); //fix
       }
      
      
-      if  ( deckDealer.getisEmpty() ) 
-      {
+      if  ( getisDeckDealerEmpty() ) {
          feedBack.append("\ndeckDealer deck is empty!"); 
       }
-      
-      
-   
-      //System.out.print("\nYour already paired cards are: " + handHumanCardsPaired());
-      //System.out.print("\ndeckDealer: " + deckDealer.getDeck().size() + " cards left in the deck\n" );
-      //System.out.println("computerPoints = " + computerPoints + " humanPoints = " + humanPoints);
-      //System.out.print("\n (0 to draw card, double number to place down pair)"); // or double number to trade pair for points (eg: 99 for two 9's on hand) )" + output);
+
       System.out.print("\n turncounter: " + turnCounter + " Pick a card from your hand: " + getHumanHandDisplay() + " \n");
-    //Change from print to GUI obj. 2 && APPEND
-      //humanPile = new StringBuilder("");
-      //computerPile = new StringBuilder("");
-      //humanPile.append(handHumanCardsPaired());
-      //computerPile.append(handComputerCardsPaired());
-      
-      //stringBuilder.append("\ndeckDealer: " + deckDealer.getDeck().size() + " cards left in the deck\n" );
-      //stringBuilder.append("computerPoints = " + computerPoints + " humanPoints = " + humanPoints);
-      //stringBuilder.append("\n (0 to draw card, double number to place down pair)"); // or double number to trade pair for points (eg: 99 for two 9's on hand) )" + output);
-      stringBuilder.append("\n turncounter: " + turnCounter + " Pick a card from your hand: " + getHumanHandDisplay() + " \n");
-   //stringBuilder.append();
-      //textArea.setText(stringBuilder.toString());
-   
-      //Scanner keyboard = new Scanner(System.in);
-      //setScanNumber(keyboard.nextInt());  
-      feedBack.append("\nhuman chose card #" + numberToScan);
-   
-   
-      //humanAlgorithm();
-      //super.updateArea();
-      //return getHumanTurn();
-   
+      turnCounterFB.append("\n turncounter: " + turnCounter + " Pick a card from your hand: " + getHumanHandDisplay() + " \n");
+
+      if (numberToScan == 0){
+        feedBack.append("\n"+"["+turnCounter+"] "+"Human calls GoFish!");
+      }
+      else{
+        feedBack.append("\n"+"["+turnCounter+"] "+"Human chose card #" + numberToScan);
+      }
     
    }
    public void humanAlgorithm()
    {
-      int one = numberToScan / 10;
-      int two = numberToScan % 10;
-      //boolean pair = (one == two && numberToScan != 0); //tough lesson
-      //int tunedNumber = 0;
       boolean isZero = (getScanNumber() == 0);
-      //if (pair) { tunedNumber = one; }
-      //if (tunedNumber != 0) { setScanNumber(tunedNumber); }
-    
-    
-    //Check if player has desired card otherwise cheating!
       cheating = getIsHumanCheating();
-   
-     //Remove two of the same card
-      //if (pair && !cheating){ humanPairNonCheating(one, two);}
-      //Scan computers hand w. numberToScan returning if match
-      match = getIsHumanMatch(isZero);
-           //Match
+      match = getIsHumanMatch();
       if (!computerTurn && humanTurn && !cheating )//&& !pair)
       {
-         if (match)
+         System.out.println("Match is " + match);
+         if (!isZero && match)
          {
-            feedBack.append( "\nMatch! Go Again!");
+            feedBack.append( "\n"+"["+turnCounter+"] "+"Match! Go Again!");
             humanPairedCards.add( numberToScan );
             humanPairedCards.add( numberToScan );
-            humanPile.append(" "+numberToScan+numberToScan);
+            humanPile.append(" ("+numberToScan+numberToScan+")");
             removeCardHumanComputer();
             match = false;
             humanPoints = humanPoints + 1;
          }
-         else //GoFish
+         else
          {
             if (!getisDeckDealerEmpty()) 
             { 
                handHuman.addCard(handComputer, deckDealer);
-               feedBack.append("\nGoFish! (humanTurn)");
-               feedBack.append( "\nMatch! Go Again!");
+               feedBack.append("\n"+"["+turnCounter+"] "+"GoFish! (humanTurn)");
+               turnCounter += 1;
             }
             humanTurn = false; 
             computerTurn = true;
@@ -227,6 +190,25 @@ public class fishEngine  implements Serializable
  ///////////////////////////////////////////////////////////////////////////
  /////////////////////////computer Main///////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
+   public void doDuplicatesFirst(){
+       //Lets just do one pair right now and later on worry about two pairs.
+      for(int i = 0; i<this.handComputer.getHand().size(); i++)
+      {
+         //check for duplicates
+         for (int j = i + 1; j < this.handComputer.getHand().size(); j ++){
+             if (this.handComputer.handComputer.get(i).equals(this.handComputer.handComputer.get(j))) {
+                 System.out.println("[doDuplicatesFirst] Found Matching Numbers: " + this.handComputer.handComputer.get(i));
+                 computerPoints = computerPoints + 1; 
+                 feedBack.append("\n"+"["+turnCounter+"] "+"Computer placing down pair ("+ this.handComputer.handComputer.get(i)+")");
+                 int num = this.handComputer.handComputer.get(i);
+                 computerPile.append(" ("+num+num+")");
+                 handComputer.removePair(num,num);
+                 break;//One pair at the moment
+             }
+         }
+         
+      }
+   }
    public  void computerInput()
    {
       turnManage();
@@ -238,9 +220,15 @@ public class fishEngine  implements Serializable
       System.out.println("\ncomputerPoints = " + computerPoints + ", humanPoints = " + humanPoints);
       System.out.println("\nturnCounter = " + turnCounter);
        //Grab a random number based on difficulty level
+      doDuplicatesFirst();
       setComputerNumber();
       boolean isZero = (getScanNumber() == 0);
-      feedBack.append("\ncomputer chose card #" + numberToScan);
+      if (isZero){
+        feedBack.append("\n"+"["+turnCounter+"] "+"GoFish! (computerTurn)");  
+      }
+      else{
+        feedBack.append("\n"+"["+turnCounter+"] "+"Computer chose card #" + numberToScan);
+      }
    
       match = getIsComputerMatched(isZero);
       if (match)
@@ -248,14 +236,14 @@ public class fishEngine  implements Serializable
          computerPoints = computerPoints + 1; 
          removeCardHumanComputer();
          ComputerPairedCards.add( numberToScan ); ComputerPairedCards.add( numberToScan );
-         computerPile.append(" "+numberToScan+numberToScan);
+         computerPile.append(" ("+numberToScan+numberToScan+")");
       }
       else
       { 
          if (!match && !isZero && !getisDeckDealerEmpty()) 
          {
             handComputer.addCard(handHuman, handComputer, deckDealer);
-            feedBack.append("\nGoFish! (computerTurn)");
+            feedBack.append("\n"+"["+turnCounter+"] "+"GoFish! (computerTurn)");
             
          } 
          turnCounter = turnCounter + 1; 
@@ -292,7 +280,11 @@ public class fishEngine  implements Serializable
       }
       else
       { 
-         setScanNumber( random.nextInt(handComputer.getHand().size()) );
+          //Errors here if computer hand is empty lol
+          //java.lang.IllegalArgumentException: bound must be positive
+          //Check for if computer hand is empty haha.
+          //SUPER RARE bug ! What are the odds? ?!!
+         setScanNumber( random.nextInt(handComputer.getHand().size()) ); 
       }
    }
    public    boolean getIsComputerMatched(boolean isZero)
@@ -302,7 +294,7 @@ public class fishEngine  implements Serializable
       {
          System.out.println("computer is drawing card");
          handComputer.addCard(handHuman, handComputer, deckDealer);
-         feedBack.append("\nGoFish! (computerTurn)");
+         //feedBack.append("\nGoFish! (computerTurn)");
       } 
        //Scan human hand w. numberToScan 
       boolean hasPicked = false;
@@ -312,7 +304,7 @@ public class fishEngine  implements Serializable
          if ( !hasPicked && !isZero && handHuman.getHand().get(i).equals(numberToScan))
          { 
             //handComputer.MatchPicked(getScanNumber(), hasPicked );
-            feedBack.append( "\n(computer):Do you have a " + numberToScan + "?" + "(matched)");
+            //feedBack.append( "\n(computer):Do you have a " + numberToScan + "?" + "(matched)");
             match = true;
             hasPicked = true;
          }
@@ -388,7 +380,7 @@ public class fishEngine  implements Serializable
       if (cheating) {feedBack.append("\nYou are cheating. You do not own card # " + numberToScan + "! Try Again!");  }
       return cheating;
    }
-   public    void humanPairNonCheating(int one, int two)
+   public void humanPairNonCheating(int one, int two)
    {
    
       handHuman.removePair(one, two); 
@@ -397,12 +389,12 @@ public class fishEngine  implements Serializable
                // setComputerTurn(true); 
       humanPairedCards.add( one ); humanPairedCards.add( two );
    }
-   public    boolean getIsHumanMatch(boolean isZero)
+   public boolean getIsHumanMatch()
    {
       boolean isMatch = false;
       for (int i = 0; i < handComputer.getHand().size(); i++) 
       {
-         if (!isZero && handComputer.getHand().get(i).equals(numberToScan))
+         if (handComputer.getHand().get(i).equals(numberToScan))
          {
             isMatch = true;
          }

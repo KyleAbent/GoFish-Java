@@ -63,7 +63,7 @@ public class handofHuman implements Serializable
    
    public static void removePair(int one, int two)
    {
-      {JOptionPane.showMessageDialog(null,"removing pairs " + one + two); }
+      //{JOptionPane.showMessageDialog(null,"removing pairs " + one + two); }
      
       for (int i = 0; i < handHuman.size(); i++) 
       { 

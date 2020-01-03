@@ -1,18 +1,12 @@
-//Kyle 'Avoca' Abent loves his grandma Rose 'Howard St' Abent.
-import static fishEngine.stringBuilder;
 import javax.swing.JOptionPane;
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import java.util.StringTokenizer;
-
-
+//Kyle 'Avoca' Abent loves his grandma Rose 'Howard St' Abent.
 public class GoFish  extends JFrame implements ActionListener
 { 
 
@@ -36,8 +30,10 @@ public class GoFish  extends JFrame implements ActionListener
    private ObjectOutputStream sout;
    private ObjectInputStream sin;
    fishEngine fEngine = new fishEngine();
-   private JTextArea textArea = new JTextArea("", 25, 30); 
-   protected  JTextArea feedBack = new JTextArea("", 25, 30); 
+   private JTextArea textArea = new JTextArea("", 25, 30);  
+   //protected  JTextArea feedBack = new JTextArea("", 25, 30); 
+   protected  JTextPane feedBack = new JTextPane();//("", 25, 30); 
+
    protected  JTextArea pile = new JTextArea("", 25, 30); 
    
    private JButton endTurn = new JButton("GoFish");
@@ -48,10 +44,7 @@ public class GoFish  extends JFrame implements ActionListener
    JScrollPane  scrollTwo = new JScrollPane(feedBack);
    JScrollPane  scrollThree = new JScrollPane(pile);
    
-   
    JButton[] humanHand = new JButton[10];
-   //JButton[] humanPile = new JButton[45];
-   //JButton[] computerPile = new JButton[45]; 
    
    JLabel  cCards = new JLabel("45 cards left in the deck");  
    JLabel  eTitle = new JLabel("Computer Pts:)");   
@@ -59,11 +52,8 @@ public class GoFish  extends JFrame implements ActionListener
    JLabel  wTitle = new JLabel("Human Pts:)"); 
    JLabel  hPts = new JLabel(" "); 
    private JCheckBox dbg = new JCheckBox("debug"); 
+   private int humanChoseForDup = 0;
  
-   
-    
-    
-   
    
    public static void main(String[] args)
    {
@@ -74,8 +64,6 @@ public class GoFish  extends JFrame implements ActionListener
       GF.setVisible(true);
       GF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
       fishEngine fEngine = new fishEngine();
-      
-      
    }
  
    
@@ -106,8 +94,7 @@ public class GoFish  extends JFrame implements ActionListener
       centerP.add(scrollTwo);
       centerP.add(scrollThree);
       centerP.add(cCards);
-   
-      //centerP.add(newGame);
+      
       newGame.addActionListener(this);
       
       southP.setLayout(new GridLayout(10,1)); // 2, 2
@@ -121,10 +108,6 @@ public class GoFish  extends JFrame implements ActionListener
       myContainer.add(southP, BorderLayout.SOUTH);
       myContainer.add(westP, BorderLayout.WEST);
       myContainer.add(eastP, BorderLayout.EAST);
-      //myContainer.add(textArea);
-      //myContainer.add(goldFishBtn);
-      //System.out.println("c = " + myContainer + " humanPoints = " + humanPoints); 
-      //fEngine.turnIgnition(); 
       southP.add(endTurn);
       endTurn.addActionListener(this);
       for(int i = 0; i < 10; i++) {
@@ -136,28 +119,22 @@ public class GoFish  extends JFrame implements ActionListener
       westP.add(wTitle);
       westP.add(hPts);
       westP.setLayout(new GridLayout(4,5));
-      /*
-      for(int i = 0; i < 15; i++) {
-         humanPile[i] = new JButton(String.valueOf(i));
-         westP.add(humanPile[i]);
-         //humanPile[i].setVisible(false);
-      }
-      */
       eastP.add(eTitle);
-     
       eastP.add(cPts);
       eastP.setLayout(new GridLayout(4,5));
-      
-   
-      /*
-      for(int i = 0; i < 15; i++) {
-         computerPile[i] = new JButton(String.valueOf(i));
-         eastP.add(computerPile[i]);
-         //humanPile[i].setVisible(false);
-      }
-      */
-   
+
+       startFresh();
      
+   }
+   public void startFresh(){
+        fEngine.deckDealer.ResetDeck();
+        fEngine.handComputer.resetHand();
+        fEngine.handHuman.resetHand();
+        fEngine.createDeck();
+        fEngine.resetFeedbacks();
+        fEngine.humanPoints = 0;
+        fEngine.computerPoints = 0;
+        updateGUI();
    }
    public void updateGUI()
    {
@@ -188,7 +165,7 @@ public class GoFish  extends JFrame implements ActionListener
       }
       
       pile.setText("human Pile" + fEngine.humanPile.toString() + "\n computer Pile" + fEngine.computerPile.toString());
-      textArea.setText(fEngine.stringBuilder.toString());
+      textArea.setText(fEngine.turnCounterFB.toString());
       feedBack.setText(fEngine.feedBack.toString());
       
       for(int i = 0; i < 10; i++) 
@@ -202,37 +179,6 @@ public class GoFish  extends JFrame implements ActionListener
       hPts.setText(String.valueOf(fEngine.humanPoints));
       cPts.setText(String.valueOf(fEngine.computerPoints));
       cCards.setText(" " + fEngine.deckDealer.getDeck().size() + " cards left in the deck");  
-   //   System.out.print("\ndeckDealer: " + deckDealer.getDeck().size() + " cards left in the deck\n" );
-   
-      /*
-      for(int i = 0; i < fEngine.ComputerPairedCards.size(); i++) 
-      {
-         String number = String.valueOf(fEngine.ComputerPairedCards.get(i));
-         computerPile[i].setText(number); //hide rest
-         computerPile[i].setVisible(true);
-      }
-      for(int i = 0; i < fEngine.humanPairedCards.size(); i++) 
-      {
-         String number = String.valueOf(fEngine.humanPairedCards.get(i));
-         humanPile[i].setText(number); //hide rest
-         humanPile[i].setVisible(true);
-      }
-   
-      for(int i = 0; i < 15; i++) 
-      {
-         if (i > fEngine.ComputerPairedCards.size()) 
-         {
-            computerPile[i].setVisible(false);
-         }
-      }
-      for(int i = 0; i < 15; i++)
-      {
-         if (i > fEngine.humanPairedCards.size()) 
-         {
-            humanPile[i].setVisible(false);
-         }
-      }
-      */
    }
    public void actionPerformed(ActionEvent e)
    {
@@ -253,17 +199,9 @@ public class GoFish  extends JFrame implements ActionListener
          SaveBSAFile();
       }
       else if (e.getSource() == newF)
-      {
-         //fEngine.turnIgnition(); 
-        System.out.println("dsds New Game Selected");
-        fEngine.deckDealer.ResetDeck();
-        fEngine.handComputer.resetHand();
-        fEngine.handHuman.resetHand();
-        fEngine.createDeck();
-        fEngine.resetFeedbacks();
-        fEngine.humanPoints = 0;
-        fEngine.computerPoints = 0;
-        updateGUI();
+      { 
+       startFresh();
+       fEngine.turnManage();
       }
       else if (e.getSource() == endTurn)
       {
@@ -298,9 +236,20 @@ public class GoFish  extends JFrame implements ActionListener
             JButton button = (JButton) e.getSource();
             int num = Integer.parseInt(button.getText());
             System.out.println("button clicked is " + num);
-            fEngine.numberToScan = num;
-            fEngine.humanInput(); 
-            fEngine.humanAlgorithm();
+            boolean isDuplicate = false;
+            isDuplicate = checkHumanForDuplicate(num);
+            if (isDuplicate){
+                button.setBackground(Color.green);
+                if (humanChoseForDup >= 2){//Meant to allow the choice of removing pair. Ah well. One day. lol.
+                    removeHumanDuplicate(num);
+                }
+            }
+            else{
+                fEngine.numberToScan = num;
+                fEngine.humanInput(); 
+                fEngine.humanAlgorithm();
+            }
+            humanChoseForDup = 0;
             updateGUI();
             
          }
@@ -312,7 +261,31 @@ public class GoFish  extends JFrame implements ActionListener
          }
       }
    }
-   
+   public boolean checkHumanForDuplicate(int num){
+       if (num == 0){
+           return false;
+       }
+       boolean isDup = false;
+       int count = 0;
+         //check for duplicates
+         for (int i = 0; i < fEngine.handHuman.getHand().size(); i ++){
+             if (fEngine.handHuman.handHuman.get(i).equals(num)) {
+                 System.out.println("Found Matching Numbers: " + num);
+                 count = count + 1;
+                 humanChoseForDup = humanChoseForDup + 1;
+             }
+         }
+         if (count >= 2){
+             isDup = true;
+         }
+         return isDup;
+   }
+   public void removeHumanDuplicate(int num){
+         fEngine.feedBack.append("\n"+"["+fEngine.turnCounter+"] "+"Human placing down pair ("+ num+")");
+         fEngine.handHuman.removePair(num, num);//Why two paremeter? lol.
+         fEngine.humanPile.append(" ("+num+num+")");
+         fEngine.humanPoints += 1;
+   }
    public void OpenBSAFile()
    {
       jfc.setFileSelectionMode(JFileChooser.FILES_ONLY );
@@ -352,7 +325,7 @@ public class GoFish  extends JFrame implements ActionListener
             fEngineRead.feedBack.append ( (String) sin.readUTF() );
             fEngineRead.humanPile.append ( (String) sin.readUTF() );
             fEngineRead.computerPile.append ( (String) sin.readUTF() );
-            fEngineRead.stringBuilder.append( (String) sin.readUTF() );
+            fEngineRead.turnCounterFB.append( (String) sin.readUTF() );
             
             fEngine = fEngineRead;
             fEngine.deckDealer = fEngineRead.deckDealer;
@@ -361,7 +334,7 @@ public class GoFish  extends JFrame implements ActionListener
             fEngine.feedBack = fEngineRead.feedBack;
             fEngine.humanPile = fEngineRead.humanPile;
             fEngine.computerPile = fEngineRead.computerPile;
-            fEngine.stringBuilder = fEngineRead.stringBuilder;
+            fEngine.turnCounterFB = fEngineRead.turnCounterFB;
 
             sin.close();
             updateGUI();
@@ -408,7 +381,7 @@ public class GoFish  extends JFrame implements ActionListener
             sout.writeUTF(fEngine.feedBack.toString());
             sout.writeUTF(fEngine.humanPile.toString());
             sout.writeUTF(fEngine.computerPile.toString());
-            sout.writeUTF(fEngine.stringBuilder.toString());
+            sout.writeUTF(fEngine.turnCounterFB.toString());
             JOptionPane.showMessageDialog( this, "File " + gFile + " saved" );
             sout.close();   
          } 

@@ -108,6 +108,31 @@ public class handofComputer implements Serializable
     //for (int index = 0; index < handComputer.size(); index++) {System.out.println("handComputer has card number" + handComputer.get(index));}    
     
    }
+   public static void removePair(int one, int two)
+   {
+      //{JOptionPane.showMessageDialog(null,"removing pairs " + one + two); }
+     
+      for (int i = 0; i < handComputer.size(); i++) 
+      { 
+         if (handComputer.get(i).equals(one))
+         {
+            System.out.println("removing from handComputer card # " + handComputer.get(i));
+            handComputer.remove(i);
+            break;
+         }
+      }  
+       
+       
+      for (int i = 0; i < handComputer.size(); i++) 
+      {
+         if (handComputer.get(i).equals(two))
+         {
+            System.out.println("removing from handComputer card # " + handComputer.get(i));
+            handComputer.remove(i);
+            break;
+         }
+      }        
+   } 
    public void removePairHuman(int one, int two, ArrayList handHuman)
    {
       {
