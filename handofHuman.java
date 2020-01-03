@@ -5,22 +5,22 @@ import java.io.Serializable;
 
 public class handofHuman implements Serializable
 {
-   protected static ArrayList<Integer>  handHuman = new ArrayList<Integer>();
+   protected static ArrayList<String>  handHuman = new ArrayList<String>();
 
    public static void main(String[] args)
    {
    }
    public void resetHand(){
-       handHuman = new ArrayList<Integer>();
+       handHuman = new ArrayList<String>();
    }
    public static void createHand(ArrayList deckDealer)
    {
       Random rand = new Random();
       int idx = rand.nextInt(deckDealer.size());
-      int value = (int)deckDealer.get(idx);
+      String card = deckDealer.get(idx).toString();
       int temp = idx;
       deckDealer.remove( deckDealer.get( idx) ); //object not int
-      handHuman.add( value );
+      handHuman.add( card );
       deckDealer.trimToSize();
    }
    public static ArrayList getHand()
@@ -48,8 +48,7 @@ public class handofHuman implements Serializable
      
       Random rand = new Random();     
       int idx = rand.nextInt(deckDealer.getDeck().size());
-      int value = (int)deckDealer.getDeck().get(idx);
-      int temp = idx;
+      String value = deckDealer.getDeck().get(idx).toString();
       deckDealer.getDeck().remove( deckDealer.getDeck().get( idx) ); //object not int
    
       deckDealer.getDeck().trimToSize();  
@@ -61,13 +60,13 @@ public class handofHuman implements Serializable
    }
    
    
-   public static void removePair(int one, int two)
+   public static void removePair(String value)
    {
       //{JOptionPane.showMessageDialog(null,"removing pairs " + one + two); }
-     
+     //just do a count int do twice o_O rather than write a for loop twice.. lol
       for (int i = 0; i < handHuman.size(); i++) 
       { 
-         if (handHuman.get(i).equals(one))
+         if (handHuman.get(i).equals(value))
          {
             System.out.println("removing from human card # " + handHuman.get(i));
             handHuman.remove(i);
@@ -78,7 +77,7 @@ public class handofHuman implements Serializable
        
       for (int i = 0; i < handHuman.size(); i++) 
       {
-         if (handHuman.get(i).equals(two))
+         if (handHuman.get(i).equals(value))
          {
             System.out.println("removing from human card # " + handHuman.get(i));
             handHuman.remove(i);

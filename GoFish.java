@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+
 //Kyle 'Avoca' Abent loves his grandma Rose 'Howard St' Abent.
 public class GoFish  extends JFrame implements ActionListener
 { 
@@ -43,6 +44,7 @@ public class GoFish  extends JFrame implements ActionListener
    JScrollPane  scroll = new JScrollPane(textArea);
    JScrollPane  scrollTwo = new JScrollPane(feedBack);
    JScrollPane  scrollThree = new JScrollPane(pile);
+   
    
    JButton[] humanHand = new JButton[10];
    
@@ -112,6 +114,7 @@ public class GoFish  extends JFrame implements ActionListener
       endTurn.addActionListener(this);
       for(int i = 0; i < 10; i++) {
          humanHand[i] = new JButton(String.valueOf(i));
+         //humanHand[i].setPreferredSize(new Dimension(73, 98));
          southP.add(humanHand[i]);
          humanHand[i].addActionListener(this);
       }
@@ -141,10 +144,22 @@ public class GoFish  extends JFrame implements ActionListener
       
       for(int i = 0; i<fEngine.handHuman.getHand().size(); i++)
       {
-         String number = fEngine.handHuman.getHand().get(i).toString(); 
-         humanHand[i].setText(number); //hide rest
+         String value = fEngine.handHuman.getHand().get(i).toString(); 
+         humanHand[i].setText(value); //hide rest
          humanHand[i].setVisible(true);   
          humanHand[i].setBackground(null);
+          try {
+            String searchString = value.toLowerCase();
+            System.out.println("searchString is " + searchString);
+            Icon icon = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\"+searchString+".jpg"); //Try a less ... demanding path.. heh.
+            //Icon icon = new ImageIcon(getClass().getResource("cardPics\\"+searchString+".jpg"));  
+            humanHand[i].setIcon(icon);
+            humanHand[i].setPreferredSize(new Dimension(40, 50));
+          } 
+            catch (Exception ex) {
+            System.out.println("Unable to add card image");
+            System.out.println(ex);
+          }
 
       }
       
@@ -207,7 +222,7 @@ public class GoFish  extends JFrame implements ActionListener
       {
          
          updateGUI();
-         fEngine.setScanNumber(0);
+         fEngine.setScanValue("0");
          fEngine.humanAlgorithm();
          fEngine.humanInput(); 
          updateGUI();
@@ -234,18 +249,18 @@ public class GoFish  extends JFrame implements ActionListener
            //Check for duplicates
             updateGUI();
             JButton button = (JButton) e.getSource();
-            int num = Integer.parseInt(button.getText());
-            System.out.println("button clicked is " + num);
+            String value = (button.getText());
+            System.out.println("button clicked is " + value);
             boolean isDuplicate = false;
-            isDuplicate = checkHumanForDuplicate(num);
+            isDuplicate = checkHumanForDuplicate(value);
             if (isDuplicate){
                 button.setBackground(Color.green);
                 if (humanChoseForDup >= 2){//Meant to allow the choice of removing pair. Ah well. One day. lol.
-                    removeHumanDuplicate(num);
+                    removeHumanDuplicate(value);
                 }
             }
             else{
-                fEngine.numberToScan = num;
+                fEngine.valueToScan = value;
                 fEngine.humanInput(); 
                 fEngine.humanAlgorithm();
             }
@@ -261,16 +276,16 @@ public class GoFish  extends JFrame implements ActionListener
          }
       }
    }
-   public boolean checkHumanForDuplicate(int num){
-       if (num == 0){
+   public boolean checkHumanForDuplicate(String value){
+       if (value == "0"){
            return false;
        }
        boolean isDup = false;
        int count = 0;
          //check for duplicates
          for (int i = 0; i < fEngine.handHuman.getHand().size(); i ++){
-             if (fEngine.handHuman.handHuman.get(i).equals(num)) {
-                 System.out.println("Found Matching Numbers: " + num);
+             if (fEngine.handHuman.handHuman.get(i).equals(value)) {
+                 System.out.println("Found Matching Numbers: " + value);
                  count = count + 1;
                  humanChoseForDup = humanChoseForDup + 1;
              }
@@ -280,10 +295,10 @@ public class GoFish  extends JFrame implements ActionListener
          }
          return isDup;
    }
-   public void removeHumanDuplicate(int num){
-         fEngine.feedBack.append("\n"+"["+fEngine.turnCounter+"] "+"Human placing down pair ("+ num+")");
-         fEngine.handHuman.removePair(num, num);//Why two paremeter? lol.
-         fEngine.humanPile.append(" ("+num+num+")");
+   public void removeHumanDuplicate(String value){
+         fEngine.feedBack.append("\n"+"["+fEngine.turnCounter+"] "+"Human placing down pair ("+ value+")");
+         fEngine.handHuman.removePair(value);//Why two paremeter? lol.
+         fEngine.humanPile.append(" ("+value+")");
          fEngine.humanPoints += 1;
    }
    public void OpenBSAFile()

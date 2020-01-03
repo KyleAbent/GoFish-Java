@@ -6,7 +6,7 @@ public class handofComputer implements Serializable
 
 
 {
-   protected static ArrayList<Integer>  handComputer = new ArrayList<Integer>();
+   protected static ArrayList<String>  handComputer = new ArrayList<String>();
 
    public static void main(String[] args)
    {
@@ -18,7 +18,7 @@ public class handofComputer implements Serializable
       
       Random rand = new Random();
       int idx = rand.nextInt(deckDealer.size());
-      int value = (int)deckDealer.get(idx);
+      String value = deckDealer.get(idx).toString();
       int temp = idx;
       deckDealer.remove( deckDealer.get( idx) ); //object not int
       handComputer.add( value );
@@ -26,7 +26,7 @@ public class handofComputer implements Serializable
       System.out.println("Computer added card" + value);
    }
    public void resetHand(){
-       handComputer = new ArrayList<Integer>();
+       handComputer = new ArrayList<String>();
    }
    public ArrayList getHand()
    {
@@ -60,7 +60,7 @@ public class handofComputer implements Serializable
      
       Random rand = new Random();     
       int idx = rand.nextInt(deckDealer.getDeck().size());
-      int value = (int)deckDealer.getDeck().get(idx);
+      String value = deckDealer.getDeck().get(idx).toString();
       int temp = idx;
      
       deckDealer.getDeck().remove( deckDealer.getDeck().get( idx) ); //object not int
@@ -108,13 +108,13 @@ public class handofComputer implements Serializable
     //for (int index = 0; index < handComputer.size(); index++) {System.out.println("handComputer has card number" + handComputer.get(index));}    
     
    }
-   public static void removePair(int one, int two)
+   public static void removePair(String value)
    {
       //{JOptionPane.showMessageDialog(null,"removing pairs " + one + two); }
      
       for (int i = 0; i < handComputer.size(); i++) 
       { 
-         if (handComputer.get(i).equals(one))
+         if (handComputer.get(i).equals(value))
          {
             System.out.println("removing from handComputer card # " + handComputer.get(i));
             handComputer.remove(i);
@@ -125,7 +125,7 @@ public class handofComputer implements Serializable
        
       for (int i = 0; i < handComputer.size(); i++) 
       {
-         if (handComputer.get(i).equals(two))
+         if (handComputer.get(i).equals(value))
          {
             System.out.println("removing from handComputer card # " + handComputer.get(i));
             handComputer.remove(i);
