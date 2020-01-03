@@ -54,16 +54,13 @@ public class handofComputer implements Serializable
    }
    public void addCard(handofHuman handHuman, handofComputer handComputer, deckofDealer deckDealer)
    {    
-   
+      //System.out.println("handComputer add card get deck is prior: " + deckDealer.getDeck());
       deckDealer.getDeck().trimToSize(); 
-     
-     
       Random rand = new Random();     
       int idx = rand.nextInt(deckDealer.getDeck().size());
       String value = deckDealer.getDeck().get(idx).toString();
-      int temp = idx;
      
-      deckDealer.getDeck().remove( deckDealer.getDeck().get( idx) ); //object not int
+      deckDealer.getDeck().remove( deckDealer.getDeck().get(idx)); //object not int
    
       deckDealer.getDeck().trimToSize();  
       // System.out.println("deckDealer removed card # " + temp);
@@ -73,6 +70,7 @@ public class handofComputer implements Serializable
       //JOptionPane.showMessageDialog(null, "GoFish! (computerTurn)");
       System.out.println("GoFish! (computerTurn)");
       System.out.println("Computer added card" + value);
+      //System.out.println("handComputer add card get deck is after: " + deckDealer.getDeck());
       return;
    }
    

@@ -41,12 +41,9 @@ public class handofHuman implements Serializable
    
    public static void addCard(handofComputer handComputer, deckofDealer deckDealer)
    {    
-   
+      //System.out.println("handHuman add card get deck is prior: " + deckDealer.getDeck());
       deckDealer.getDeck().trimToSize(); 
            
-           
-     
-     
       Random rand = new Random();     
       int idx = rand.nextInt(deckDealer.getDeck().size());
       String value = deckDealer.getDeck().get(idx).toString();
@@ -58,6 +55,8 @@ public class handofHuman implements Serializable
       System.out.println("handHuman added card # " + value);
       //JOptionPane.showMessageDialog(null, "GoFish! (humanTurn)");
       System.out.println("GoFish! (humanTurn)");
+      //System.out.println("handHuman add card get deck is after: " + deckDealer.getDeck());
+
    }
    
    

@@ -53,7 +53,8 @@ public class GoFish  extends JFrame implements ActionListener
    JLabel  cPts = new JLabel(" "); 
    JLabel  wTitle = new JLabel("Human Pts:)"); 
    JLabel  hPts = new JLabel(" "); 
-   private JCheckBox dbg = new JCheckBox("debug"); 
+   private JCheckBox cpuHand = new JCheckBox("Show Computer Hand"); 
+   private JCheckBox dckHand = new JCheckBox("Show Deck Dealer Hand"); 
    private int humanChoseForDup = 0;
  
    
@@ -85,10 +86,13 @@ public class GoFish  extends JFrame implements ActionListener
       
       jmb.add(aboutM);
       jmb.add(gameM);
-      northP.add(dbg);
+      northP.add(cpuHand);
+      northP.add(dckHand);
       CheckBoxListener myCheckBoxListener = new CheckBoxListener();
-      dbg.addItemListener(myCheckBoxListener);
-      dbg.setSelected(false);
+      cpuHand.addItemListener(myCheckBoxListener);
+      cpuHand.setSelected(false);
+      dckHand.addItemListener(myCheckBoxListener);
+      dckHand.setSelected(false);
       northP.add(jmb);
       
       centerP.setLayout(new GridLayout(2,2)); // 2, 2
@@ -425,10 +429,15 @@ public class GoFish  extends JFrame implements ActionListener
    {  
       public void itemStateChanged(ItemEvent e)
       {	// process checkbox events
-         if ( e.getSource() == dbg )	
+         if ( e.getSource() == cpuHand )	
          {
-            dbg.setSelected(false);
+            cpuHand.setSelected(false);
             System.out.println(fEngine.getComputerHandDisplay());
+         }
+         else if ( e.getSource() == dckHand )	
+         {
+            dckHand.setSelected(false);
+            System.out.println(fEngine.getdeckHandDisplay());
          }
       }
    }
