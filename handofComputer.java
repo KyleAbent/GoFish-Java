@@ -76,38 +76,6 @@ public class handofComputer implements Serializable
       return;
    }
    
-   public void removeCard(int numberToScan, ArrayList handHuman, ArrayList handComputer)
-   {
-    
-      for (int i = 0; i < handHuman.size(); i++) 
-      {
-      //  System.out.println("removeCardHumanComputer handHuman NumberToScan is" + numberToScan + "index number is " + handHuman.get(i) ); 
-         if (handHuman.get(i).equals(numberToScan))
-         {
-            System.out.println("removing from human card # " + handHuman.get(i));
-            handHuman.remove(i);
-            handHuman.trimToSize();
-            break;
-         }
-      }    
-        
-      for (int i = 0; i < handComputer.size(); i++) 
-      {
-      //  System.out.println("removeCardHumanComputer handComputer NumberToScan is" + numberToScan + "index number is " + handComputer.get(i) ); 
-         if (handComputer.get(i).equals(numberToScan))
-         {
-            System.out.println("removing from computer card # " + handComputer.get(i));
-            handComputer.remove(i);
-            handComputer.trimToSize();
-            break;
-         }
-      }               
-   
-      
-   //  for (int index = 0; index < handHuman.size(); index++) {System.out.println("handHuman has card number" + handHuman.get(index));}
-    //for (int index = 0; index < handComputer.size(); index++) {System.out.println("handComputer has card number" + handComputer.get(index));}    
-    
-   }
    public static void removePair(String value)
    {
       //{JOptionPane.showMessageDialog(null,"removing pairs " + one + two); }
@@ -133,33 +101,5 @@ public class handofComputer implements Serializable
          }
       }        
    } 
-   public void removePairHuman(int one, int two, ArrayList handHuman)
-   {
-      {
-      // JOptionPane.showMessageDialog(null,"removing pairs " + one + two);
-      }
-       
-      for (int i = 0; i < handHuman.size(); i++) 
-      {
-      //  System.out.println("removeCardHumanComputer handHuman NumberToScan is" + numberToScan + "index number is " + handHuman.get(i) ); 
-         if (handHuman.get(i).equals(one))
-         {
-            System.out.println("removing from human card # " + handHuman.get(i));
-            handHuman.remove(i);
-            break;
-         }
-      }  
-       
-       
-      for (int i = 0; i < handHuman.size(); i++) 
-      {
-      //  System.out.println("removeCardHumanComputer handHuman NumberToScan is" + numberToScan + "index number is " + handHuman.get(i) ); 
-         if (handHuman.get(i).equals(two))
-         {
-            System.out.println("removing from human card # " + handHuman.get(i));
-            handHuman.remove(i);
-            break;
-         }
-      }        
-   } 
+
 }

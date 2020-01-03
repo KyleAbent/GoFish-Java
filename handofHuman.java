@@ -23,11 +23,12 @@ public class handofHuman implements Serializable
       handHuman.add( card );
       deckDealer.trimToSize();
    }
-   public static ArrayList getHand()
+   public ArrayList getHand()
    {
       return handHuman;
    }
-   public static boolean getisEmpty()
+   
+   public boolean getisEmpty()
    {
       return (handHuman.size() == 0);
    }

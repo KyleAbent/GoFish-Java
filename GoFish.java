@@ -99,7 +99,7 @@ public class GoFish  extends JFrame implements ActionListener
       
       newGame.addActionListener(this);
       
-      southP.setLayout(new GridLayout(10,1)); // 2, 2
+      southP.setLayout(new FlowLayout()); // new GridLayout(10,1) // 2, 2
       
       eastP.setLayout(new GridLayout(4,1)); // 4,1 GridBagLayout??
       westP.setLayout(new GridLayout(4,1)); // 4,1 GridBagLayout??
@@ -112,6 +112,9 @@ public class GoFish  extends JFrame implements ActionListener
       myContainer.add(eastP, BorderLayout.EAST);
       southP.add(endTurn);
       endTurn.addActionListener(this);
+      Icon icon = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\larger Y\\gofish.jpg"); //Try a less ... demanding path.. heh.
+      endTurn.setIcon(icon);
+      endTurn.setPreferredSize(new Dimension(75, 98));
       for(int i = 0; i < 10; i++) {
          humanHand[i] = new JButton(String.valueOf(i));
          //humanHand[i].setPreferredSize(new Dimension(73, 98));
@@ -150,11 +153,11 @@ public class GoFish  extends JFrame implements ActionListener
          humanHand[i].setBackground(null);
           try {
             String searchString = value.toLowerCase();
-            System.out.println("searchString is " + searchString);
-            Icon icon = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\"+searchString+".jpg"); //Try a less ... demanding path.. heh.
+            //System.out.println("searchString is " + searchString);
+            Icon icon = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\larger Y\\"+searchString+".jpg"); //Try a less ... demanding path.. heh.
             //Icon icon = new ImageIcon(getClass().getResource("cardPics\\"+searchString+".jpg"));  
             humanHand[i].setIcon(icon);
-            humanHand[i].setPreferredSize(new Dimension(40, 50));
+            humanHand[i].setPreferredSize(new Dimension(75, 98));
           } 
             catch (Exception ex) {
             System.out.println("Unable to add card image");
@@ -171,7 +174,7 @@ public class GoFish  extends JFrame implements ActionListener
              //System.out.println("humanHand[i] is " + humanHand[i].getText());
              //System.out.println("humanHand[j] is " + humanHand[j].getText());
              if (humanHand[i].isVisible() && humanHand[i].getText().equals((humanHand[j].getText()))) {
-                 System.out.println("Found Matching Numbers: " + humanHand[i].getText());
+                 //System.out.println("Found Matching Numbers: " + humanHand[i].getText());
                  humanHand[i].setBackground(Color.RED);
                  humanHand[j].setBackground(Color.RED);
              }
@@ -224,7 +227,7 @@ public class GoFish  extends JFrame implements ActionListener
          updateGUI();
          fEngine.setScanValue("0");
          fEngine.humanAlgorithm();
-         fEngine.humanInput(); 
+         //fEngine.humanInput(); 
          updateGUI();
          System.out.println("GoFish");
       }
