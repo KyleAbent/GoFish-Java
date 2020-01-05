@@ -31,7 +31,7 @@ public class GoFish  extends JFrame implements ActionListener
    private ObjectOutputStream sout;
    private ObjectInputStream sin;
    fishEngine fEngine = new fishEngine();
-   private JTextArea textArea = new JTextArea("", 25, 30);  
+   private JTextArea turnCounterFBArea = new JTextArea("", 25, 30);  
    //protected  JTextArea feedBack = new JTextArea("", 25, 30); 
    protected  JTextPane feedBack = new JTextPane();//("", 25, 30); 
 
@@ -41,7 +41,7 @@ public class GoFish  extends JFrame implements ActionListener
    private JButton newGame = new JButton("newGame");
    
    
-   JScrollPane  scroll = new JScrollPane(textArea);
+   JScrollPane  scroll = new JScrollPane(turnCounterFBArea);
    JScrollPane  scrollTwo = new JScrollPane(feedBack);
    JScrollPane  scrollThree = new JScrollPane(pile);
    
@@ -71,7 +71,6 @@ public class GoFish  extends JFrame implements ActionListener
  
    
    public GoFish()       {
-      fEngine.turnIgnition();
       Container myContainer = getContentPane();
       myContainer.setLayout(new BorderLayout());
       setTitle("Go Fish"); 
@@ -137,14 +136,18 @@ public class GoFish  extends JFrame implements ActionListener
      
    }
    public void startFresh(){
+       System.out.println("Size of Deck: " + fEngine.deckDealer.getSize());
         fEngine.deckDealer.ResetDeck();
         fEngine.handComputer.resetHand();
         fEngine.handHuman.resetHand();
         fEngine.createDeck();
+        System.out.println("Size of Deck: " + fEngine.deckDealer.getSize());
         fEngine.resetFeedbacks();
         fEngine.humanPoints = 0;
         fEngine.computerPoints = 0;
+        fEngine.turnIgnition();
         updateGUI();
+        System.out.println("Size of Deck: " + fEngine.deckDealer.getSize());
    }
    public void updateGUI()
    {
@@ -187,7 +190,15 @@ public class GoFish  extends JFrame implements ActionListener
       }
       
       pile.setText("human Pile" + fEngine.humanPile.toString() + "\n computer Pile" + fEngine.computerPile.toString());
-      textArea.setText(fEngine.turnCounterFB.toString());
+      turnCounterFBArea.setText(fEngine.turnCounterFB.toString());
+      if (cpuHand.isSelected()){
+          fEngine.turnCounterFB.append("\n["+fEngine.turnCounter+"] "+"Computer Hand: " + fEngine.getComputerHandDisplay()+"\n");
+          System.out.println("Computer Hand: "+fEngine.getComputerHandDisplay());
+      }
+      if (dckHand.isSelected()){
+          fEngine.turnCounterFB.append("\n"+"["+fEngine.turnCounter+"] "+"Deck Hand: " + fEngine.getdeckHandDisplay()+"\n");
+          System.out.println("Deck Hand:" + fEngine.getComputerHandDisplay());
+      }
       feedBack.setText(fEngine.feedBack.toString());
       
       for(int i = 0; i < 10; i++) 
@@ -247,7 +258,7 @@ public class GoFish  extends JFrame implements ActionListener
             String number = fEngine.gethandHuman().getHand().get(i).toString();
             humanHand[i].setText(number); //hide rest
          }
-         textArea.setText(fishEngine.feedBack.toString());
+         turnCounterFBArea.setText(fishEngine.feedBack.toString());
       }
       else // card # button
       {
@@ -431,13 +442,13 @@ public class GoFish  extends JFrame implements ActionListener
       {	// process checkbox events
          if ( e.getSource() == cpuHand )	
          {
-            cpuHand.setSelected(false);
-            System.out.println(fEngine.getComputerHandDisplay());
+            //cpuHand.setSelected(false);
+            //System.out.println(fEngine.getComputerHandDisplay());
          }
          else if ( e.getSource() == dckHand )	
          {
-            dckHand.setSelected(false);
-            System.out.println(fEngine.getdeckHandDisplay());
+            //dckHand.setSelected(false);
+            //System.out.println(fEngine.getdeckHandDisplay());
          }
       }
    }

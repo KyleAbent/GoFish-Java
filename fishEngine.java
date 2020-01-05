@@ -71,7 +71,7 @@ public class fishEngine  implements Serializable
    public void turnIgnition()
    {
        //Create deckdealer deck
-      createDeck();
+      //createDeck();
    
    //Start turns
       turnManage();  
@@ -85,6 +85,7 @@ public class fishEngine  implements Serializable
    public void createDeck()
    {
       deckDealer.CreateDeck(); 	
+      System.out.println("Size of Deck: " + this.deckDealer.getSize());
       for (int i = 0; i <5; i++) 
       {
       // Create human && computer deck
@@ -134,7 +135,7 @@ public class fishEngine  implements Serializable
       }
 
       //System.out.print("\n turncounter: " + turnCounter + " Pick a card from your hand: " + getHumanHandDisplay() + " \n");
-      turnCounterFB.append("\n turncounter: " + turnCounter + " Pick a card from your hand: " + getHumanHandDisplay() + " \n");
+      //turnCounterFB.append("\n turncounter: " + turnCounter + " Pick a card from your hand: " + getHumanHandDisplay() + " \n");
       
       if (valueToScan == "0"){
         feedBack.append("\n"+"["+turnCounter+"] "+"Human calls GoFish!");
@@ -162,7 +163,7 @@ public class fishEngine  implements Serializable
             match = false;
             humanPoints = humanPoints + 1;
          }
-         else
+         else//Zero or not match
          {
             if (!getisDeckDealerEmpty()) 
             { 
@@ -329,7 +330,7 @@ public class fishEngine  implements Serializable
        }
       if (difficulty >= tunedNumber && getScanValue() != "0") 
       {
-         int idx = random.nextInt(handHuman.getHand().size()); //Can error here if human hand is empty. 
+         int idx = random.nextInt(tempEligable.size()); //Can error here if human hand is empty. 
          String value = tempEligable.get(idx).toString();
          setScanValue(value);
       }
@@ -339,8 +340,8 @@ public class fishEngine  implements Serializable
              setScanValue("0");
          }
          else{
-         int idx = random.nextInt(handComputer.getHand().size()); //Errors here if computer hand is empty
-         setScanValue( handComputer.getHand().get(idx).toString() ); 
+            int idx = random.nextInt(handComputer.getHand().size()); //Errors here if computer hand is empty
+            setScanValue( handComputer.getHand().get(idx).toString() ); 
           }
       }
       if (getScanValue() == "0" && getisDeckDealerEmpty()){

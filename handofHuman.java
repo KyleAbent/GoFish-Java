@@ -18,8 +18,7 @@ public class handofHuman implements Serializable
       Random rand = new Random();
       int idx = rand.nextInt(deckDealer.size());
       String card = deckDealer.get(idx).toString();
-      int temp = idx;
-      deckDealer.remove( deckDealer.get( idx) ); //object not int
+      deckDealer.remove( deckDealer.get(idx)); //object not int
       handHuman.add( card );
       deckDealer.trimToSize();
    }
