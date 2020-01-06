@@ -113,15 +113,15 @@ public class GoFish  extends JFrame implements ActionListener
 
       CheckBoxListener myCheckBoxListener = new CheckBoxListener();
       cpuHand.addItemListener(myCheckBoxListener);
-      cpuHand.setSelected(true);
+      cpuHand.setSelected(false);
       dckHand.addItemListener(myCheckBoxListener);
-      dckHand.setSelected(true);
+      dckHand.setSelected(false);
       trnLog.addItemListener(myCheckBoxListener);
-      trnLog.setSelected(true);
+      trnLog.setSelected(false);
       playerPiles.addItemListener(myCheckBoxListener);
-      playerPiles.setSelected(true);
+      playerPiles.setSelected(false);
       allDebug.addItemListener(myCheckBoxListener);
-      allDebug.setSelected(true);
+      allDebug.setSelected(false);
       northP.add(jmb);
       
       centerP.setLayout(new GridLayout(10,3)); // 2, 2
