@@ -444,7 +444,7 @@ public class fishEngine  implements Serializable
    
       return handDeckCards;
    }
-   public boolean getIsHumanCheating()
+   public boolean getIsHumanCheating()//Not relevant
    {
       cheating = true;
       for (int i = 0; i < handHuman.getHand().size(); i++) 
@@ -454,16 +454,6 @@ public class fishEngine  implements Serializable
       if (getScanValue() == "0" ) {cheating = false;}
       if (cheating) {feedBack.append("\nYou are cheating. You do not own card # " + valueToScan + "! Try Again!");  }
       return cheating;
-   }
-   public void humanPairNonCheating(String value)
-   {
-   
-      handHuman.removePair(value); 
-      humanPoints = humanPoints + 1;
-      turnCounter = turnCounter + 1;
-               // setComputerTurn(true); 
-      humanPile.append( value ); humanPile.append( value );
-      humanPileList.add(value);
    }
    public boolean getIsHumanMatch()
    {

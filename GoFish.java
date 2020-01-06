@@ -312,10 +312,8 @@ public class GoFish  extends JFrame implements ActionListener
             System.out.println("fEngine.humanPileList.get(i).toString().toLowerCase()) is " + fEngine.humanPileList.get(i).toString().toLowerCase());
              if (!humanPileCards[j].isVisible() && humanPileCards[j].getIcon().toString().contains(fEngine.humanPileList.get(i).toString().toLowerCase())){
                  humanPileCards[j].setVisible(true);
+                 fEngine.humanPileList.remove(i);//So duplicates aren't re-added. This list will be updated.
                  break; 
-             }
-             else{
-                 //humanPileCards[i].setVisible(false);
              }
             }
 
@@ -330,10 +328,8 @@ public class GoFish  extends JFrame implements ActionListener
             System.out.println("fEngine.computerPileList.get(i).toString().toLowerCase()) is " + fEngine.computerPileList.get(i).toString().toLowerCase());
              if (!computerPileCards[j].isVisible() && computerPileCards[j].getIcon().toString().contains(fEngine.computerPileList.get(i).toString().toLowerCase())){
                  computerPileCards[j].setVisible(true);
+                 fEngine.computerPileList.remove(i);//So duplicates aren't re-added. This list will be updated.
                  break;
-             }
-             else{
-                //computerPileCards[i].setVisible(false);
              }
             }
 
@@ -441,6 +437,7 @@ public class GoFish  extends JFrame implements ActionListener
          fEngine.feedBack.append("\n"+"["+fEngine.turnCounter+"] "+"Human placing down pair ("+ value+")");
          fEngine.handHuman.removePair(value);//Why two paremeter? lol.
          fEngine.humanPile.append(" ("+value+")");
+         fEngine.humanPileList.add(value);
          fEngine.humanPoints += 1;
    }
    public void OpenBSAFile()
@@ -483,8 +480,8 @@ public class GoFish  extends JFrame implements ActionListener
             fEngineRead.humanPile.append ( (String) sin.readUTF() );
             fEngineRead.computerPile.append ( (String) sin.readUTF() );
             fEngineRead.turnCounterFB.append( (String) sin.readUTF() );
-            fEngineRead.computerPileList.add( (String) sin.readUTF() );//Hm?
-            fEngineRead.humanPileList.add( (String) sin.readUTF() );//Hm?
+            fEngineRead.computerPileList = ( (ArrayList) sin.readObject() );//Hm?
+            fEngineRead.humanPileList = ( (ArrayList) sin.readObject() );//Hm?
             
             fEngine = fEngineRead;
             fEngine.deckDealer = fEngineRead.deckDealer;
@@ -543,8 +540,10 @@ public class GoFish  extends JFrame implements ActionListener
             sout.writeUTF(fEngine.humanPile.toString());
             sout.writeUTF(fEngine.computerPile.toString());
             sout.writeUTF(fEngine.turnCounterFB.toString());
-            sout.writeUTF(fEngine.computerPileList.toString());
-            sout.writeUTF(fEngine.humanPileList.toString());
+            sout.writeObject(fEngine.computerPileList); //Not useful because the old values are removed
+            sout.writeObject(fEngine.humanPileList);//Not useful because the old values are removed
+            //Once the first from PileList is added, the gui removes from list to not add duplicate
+            //Unless we have ANOTHER which lists all o_O .. or ... uhhh ..? lol.
             JOptionPane.showMessageDialog( this, "File " + gFile + " saved" );
             sout.close();   
          } 
