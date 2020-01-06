@@ -37,7 +37,9 @@ public class fishEngine  implements Serializable
    protected  static StringBuilder computerPile = new StringBuilder(""); 
    protected  ArrayList<String> humanPileList = new ArrayList<String>();
    protected  static StringBuilder debugInfo = new StringBuilder(""); 
- 
+   
+   protected  ArrayList<String> computerPileListForLoading = new ArrayList<String>();
+   protected  ArrayList<String> humanPileListForLoading = new ArrayList<String>();
    //-------JButton------//
    private JButton goldFishBtn = new JButton("GoldFish");
    

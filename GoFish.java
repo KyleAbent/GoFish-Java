@@ -55,8 +55,8 @@ public class GoFish  extends JFrame implements ActionListener
    
    JButton[] humanHand = new JButton[10];
    JButton[] computerHandBacks = new JButton[10];
-   JButton[] humanPileCards = new JButton[30];
-   JButton[] computerPileCards = new JButton[30];
+   JButton[] humanPileCards = new JButton[26];
+   JButton[] computerPileCards = new JButton[26];
    //Icon[] computerHandPiles = new ImageIcon[30];
    JLabel  hmnPileCards = new JLabel("Human Pair Pile: ");  
    JLabel  cppuCards = new JLabel("Computer Pair Pile: ");  
@@ -169,7 +169,7 @@ public class GoFish  extends JFrame implements ActionListener
          eastP.add(computerHandBacks[i]);
          //humanHand[i].addActionListener(this);
       } 
-      for(int i = 0; i < 30; i++) {
+      for(int i = 0; i < humanPileCards.length; i++) {
           humanPileCards[i] = new JButton();
           //computerHandPiles[i].setPreferredSize(new Dimension(73, 98));
           //String = deckDealer.get....
@@ -181,7 +181,7 @@ public class GoFish  extends JFrame implements ActionListener
          humanPileCards[i].setVisible(false);
       } 
        for (int j = 0; j < fEngine.deckDealer.getListOfCards().size(); j ++){
-                    if (j == 30){
+                    if (j == humanPileCards.length){
           break;
           }
           String crd = fEngine.deckDealer.getListOfCards().get(j).toString().toLowerCase();
@@ -191,7 +191,7 @@ public class GoFish  extends JFrame implements ActionListener
         }
       
       centerP.add(cppuCards);
-        for(int i = 0; i < 30; i++) {
+        for(int i = 0; i < computerPileCards.length; i++) {
             computerPileCards[i] = new JButton();
             computerPileCards[i].setPreferredSize(new Dimension(73, 98));
             String crd = fEngine.deckDealer.getListOfCards().get(i).toString().toLowerCase();
@@ -312,6 +312,7 @@ public class GoFish  extends JFrame implements ActionListener
             System.out.println("fEngine.humanPileList.get(i).toString().toLowerCase()) is " + fEngine.humanPileList.get(i).toString().toLowerCase());
              if (!humanPileCards[j].isVisible() && humanPileCards[j].getIcon().toString().contains(fEngine.humanPileList.get(i).toString().toLowerCase())){
                  humanPileCards[j].setVisible(true);
+                 fEngine.humanPileListForLoading.add(fEngine.humanPileList.get(i));
                  fEngine.humanPileList.remove(i);//So duplicates aren't re-added. This list will be updated.
                  break; 
              }
@@ -328,7 +329,9 @@ public class GoFish  extends JFrame implements ActionListener
             System.out.println("fEngine.computerPileList.get(i).toString().toLowerCase()) is " + fEngine.computerPileList.get(i).toString().toLowerCase());
              if (!computerPileCards[j].isVisible() && computerPileCards[j].getIcon().toString().contains(fEngine.computerPileList.get(i).toString().toLowerCase())){
                  computerPileCards[j].setVisible(true);
+                 fEngine.computerPileListForLoading.add(fEngine.computerPileList.get(i));
                  fEngine.computerPileList.remove(i);//So duplicates aren't re-added. This list will be updated.
+                
                  break;
              }
             }
@@ -491,8 +494,8 @@ public class GoFish  extends JFrame implements ActionListener
             fEngine.humanPile = fEngineRead.humanPile;
             fEngine.computerPile = fEngineRead.computerPile;
             fEngine.turnCounterFB = fEngineRead.turnCounterFB;
-            fEngine.computerPileList = fEngineRead.computerPileList;
-            fEngine.humanPileList = fEngineRead.humanPileList;
+            fEngine.computerPileList = fEngineRead.computerPileListForLoading;
+            fEngine.humanPileList = fEngineRead.humanPileListForLoading;
 
             sin.close();
             updateGUI();
@@ -540,8 +543,8 @@ public class GoFish  extends JFrame implements ActionListener
             sout.writeUTF(fEngine.humanPile.toString());
             sout.writeUTF(fEngine.computerPile.toString());
             sout.writeUTF(fEngine.turnCounterFB.toString());
-            sout.writeObject(fEngine.computerPileList); //Not useful because the old values are removed
-            sout.writeObject(fEngine.humanPileList);//Not useful because the old values are removed
+            sout.writeObject(fEngine.computerPileListForLoading); //Not useful because the old values are removed
+            sout.writeObject(fEngine.humanPileListForLoading);//Not useful because the old values are removed
             //Once the first from PileList is added, the gui removes from list to not add duplicate
             //Unless we have ANOTHER which lists all o_O .. or ... uhhh ..? lol.
             JOptionPane.showMessageDialog( this, "File " + gFile + " saved" );
