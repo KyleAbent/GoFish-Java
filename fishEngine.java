@@ -24,30 +24,23 @@ public class fishEngine  implements Serializable
    protected deckofDealer deckDealer = new deckofDealer();
    protected handofHuman handHuman = new handofHuman();
    protected handofComputer handComputer = new handofComputer();
-   
    protected static ArrayList<String> ComputerPairedCards = new ArrayList<String>();//J2
    private boolean gameEnd = false; //asserting turns like clocks
    ///////////Obj. 2///////////////////////////
    protected static StringBuilder turnCounterFB = new StringBuilder(""); 
    protected  JTextArea textArea = new JTextArea("", 25, 30); 
-   
    protected  static StringBuilder feedBack = new StringBuilder(); 
    protected  static StringBuilder humanPile = new StringBuilder(""); 
    protected  ArrayList<String> computerPileList = new ArrayList<String>();
    protected  static StringBuilder computerPile = new StringBuilder(""); 
    protected  ArrayList<String> humanPileList = new ArrayList<String>();
    protected  static StringBuilder debugInfo = new StringBuilder(""); 
-   
    protected  ArrayList<String> computerPileListForLoading = new ArrayList<String>();
    protected  ArrayList<String> humanPileListForLoading = new ArrayList<String>();
    //-------JButton------//
    private JButton goldFishBtn = new JButton("GoldFish");
-   
-   
    JPanel  northP = new JPanel();
    JLabel  northTitle = new JLabel("                          Tickets Tigers Tickets            ");
-   
-   
    ///////////Obj. 2///////////////////////////
    
 ///////////////////////////////////////////////////////////////////////////
@@ -79,10 +72,6 @@ public class fishEngine  implements Serializable
    
    public void turnIgnition()
    {
-       //Create deckdealer deck
-      //createDeck();
-   
-   //Start turns
       turnManage();  
    }
    
@@ -105,12 +94,7 @@ public class fishEngine  implements Serializable
    public void turnManage()
    {  //This way the turns go back and forth matching boolean
       boolean gameOver = getisDeckDealerEmpty(); //&& handHuman.getisEmpty() && handComputer.getisEmpty();
-      //while(!gameOver)
-      //{
       gameOver = getisDeckDealerEmpty();// && handHuman.getisEmpty() && handComputer.getisEmpty();
-         //if (humanTurn) { humanInput(); } 
-         //else if (computerTurn) { computerInput() ; }
-      //}
    
       if (gameOver)
       {
@@ -131,13 +115,6 @@ public class fishEngine  implements Serializable
    public void humanInput()
    {
       turnManage();
-        //feedBack.append("\n"+"["+turnCounter+"] "+"humanInput");
-      /*
-      if  ( handHuman.getisEmpty() && !getisDeckDealerEmpty()){ 
-         feedBack.append( "\nEmpty hand, drawing card."); //fix
-         //But its not o_O lol
-      }
-     */
      
       if  ( getisDeckDealerEmpty() ) {
          feedBack.append("\ndeckDealer deck is empty!"); 
@@ -260,8 +237,7 @@ public class fishEngine  implements Serializable
               debugInfo.append("\nHuman Hand Empty, Deck Empty, Computer Turn. Error!");
           }
       }
-      //if (!computerTurn) {
-         //return computerTurn;}
+
       debugInfo.append("\ncomputerPoints = " + computerPoints + ", humanPoints = " + humanPoints);
       debugInfo.append("\nturnCounter = " + turnCounter);
        //Grab a random number based on difficulty level
@@ -566,4 +542,3 @@ public class fishEngine  implements Serializable
  ///////////////////////////////////////////////////////////////////////////
  ///////////////////////// Misc///////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////// 
-

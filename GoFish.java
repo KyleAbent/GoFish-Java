@@ -10,10 +10,8 @@ import javax.swing.*;
 //Kyle 'Avoca' Abent loves his grandma Rose 'Howard St' Abent.
 public class GoFish  extends JFrame implements ActionListener
 { 
-
    File gFile = new File("a:\\"); 
    JFileChooser jfc = new JFileChooser(gFile);  
-   
    JMenuBar jmb = new JMenuBar();
    JMenu debugM = new JMenu("Debug");
    private JCheckBoxMenuItem cpuHand = new JCheckBoxMenuItem("Show Computer Hand"); 
@@ -25,7 +23,6 @@ public class GoFish  extends JFrame implements ActionListener
    JMenuItem newF = new JMenuItem("New");
    JMenuItem openF = new JMenuItem("Open");
    JMenuItem saveGame = new JMenuItem("Save");
-   
    JMenu gameM = new JMenu("Game");
    JMenuItem LoadG = new JMenuItem("Load");
    JPanel  northP = new JPanel();  
@@ -33,34 +30,25 @@ public class GoFish  extends JFrame implements ActionListener
    JPanel  southP = new JPanel(); 
    JPanel  westP = new JPanel(); 
    JPanel  eastP = new JPanel(); 
-     
    private ObjectOutputStream sout;
    private ObjectInputStream sin;
    fishEngine fEngine = new fishEngine();
-   
    private JTextArea turnCounterFBArea = new JTextArea("", 25, 30);  
    protected  JTextArea feedBack = new JTextArea("", 25, 30);//("", 25, 30); 
    protected  JTextArea pile = new JTextArea("", 25, 30); 
    protected  JTextArea allprints = new JTextArea("", 25, 30); 
-
    private JButton endTurn = new JButton("GoFish");
    private JButton newGame = new JButton("newGame");
-   
-   
    JScrollPane  scroll = new JScrollPane(turnCounterFBArea);
    JScrollPane  scrollTwo = new JScrollPane(feedBack);
    JScrollPane  scrollThree = new JScrollPane(pile);
    JScrollPane  scrollFour = new JScrollPane(allprints);
-   
-   
    JButton[] humanHand = new JButton[10];
    JButton[] computerHandBacks = new JButton[10];
    JButton[] humanPileCards = new JButton[26];
    JButton[] computerPileCards = new JButton[26];
-   //Icon[] computerHandPiles = new ImageIcon[30];
    JLabel  hmnPileCards = new JLabel("Human Pair Pile: ");  
-   JLabel  cppuCards = new JLabel("Computer Pair Pile: ");  
-   
+   JLabel  cppuCards = new JLabel("Computer Pair Pile: ");   
    JLabel  cCards = new JLabel("45 cards left in the deck");  
    JLabel  eTitle = new JLabel("Computer Pts:)");   
    JLabel  cPts = new JLabel(" "); 
@@ -98,19 +86,14 @@ public class GoFish  extends JFrame implements ActionListener
       saveGame.addActionListener(this);
       gameM.add(LoadG);
       LoadG.addActionListener(this);
-      
-      
       jmb.add(aboutM);
       jmb.add(gameM);
-      
-      
       debugM.add(cpuHand);
       debugM.add(dckHand);
       debugM.add(trnLog);
       debugM.add(playerPiles);
       debugM.add(allDebug);
       jmb.add(debugM);
-
       CheckBoxListener myCheckBoxListener = new CheckBoxListener();
       cpuHand.addItemListener(myCheckBoxListener);
       cpuHand.setSelected(false);
@@ -123,21 +106,13 @@ public class GoFish  extends JFrame implements ActionListener
       allDebug.addItemListener(myCheckBoxListener);
       allDebug.setSelected(false);
       northP.add(jmb);
-      
-      centerP.setLayout(new GridLayout(10,3)); // 2, 2
-
-      
+      centerP.setLayout(new GridLayout(10,3)); 
       eastP.add(cppuCards);
       westP.add(hmnPileCards);
-      
-      
       newGame.addActionListener(this);
-      
-      southP.setLayout(new FlowLayout()); // new GridLayout(10,1) // 2, 2
-      
-      eastP.setLayout(new FlowLayout()); // 4,1 GridBagLayout??
-      westP.setLayout(new FlowLayout()); // 4,1 GridBagLayout??
-      
+      southP.setLayout(new FlowLayout());
+      eastP.setLayout(new FlowLayout()); 
+      westP.setLayout(new FlowLayout());
       northP.setLayout(new FlowLayout());
       myContainer.add(northP, BorderLayout.NORTH);
       myContainer.add(centerP, BorderLayout.CENTER);
@@ -154,31 +129,21 @@ public class GoFish  extends JFrame implements ActionListener
       endTurn.setPreferredSize(new Dimension(75, 98));
       for(int i = 0; i < 10; i++) {
          humanHand[i] = new JButton(String.valueOf(i));
-         //humanHand[i].setPreferredSize(new Dimension(73, 98));
          southP.add(humanHand[i]);
          humanHand[i].addActionListener(this);
       }
       Icon backofCard = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\larger Y\\back.jpg"); //Try a less ... demanding path.. heh.
       for(int i = 0; i < 10; i++) {
           computerHandBacks[i] = new JButton();
-          //computerHandPiles[i].setPreferredSize(new Dimension(73, 98));
           computerHandBacks[i].setPreferredSize(new Dimension(10, 10));
           computerHandBacks[i].setIcon(backofCard);
-         //computerHandPiles[i] = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\larger Y\\back.jpg");
-         //humanHand[i].setPreferredSize(new Dimension(73, 98));
          eastP.add(computerHandBacks[i]);
-         //humanHand[i].addActionListener(this);
       } 
       for(int i = 0; i < humanPileCards.length; i++) {
           humanPileCards[i] = new JButton();
-          //computerHandPiles[i].setPreferredSize(new Dimension(73, 98));
-          //String = deckDealer.get....
-
-          //Icon backofCard = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\larger Y\\back.jpg"); //Try a less ... demanding path.. heh.
           humanPileCards[i].setPreferredSize(new Dimension(10, 10));
-          
-         westP.add(humanPileCards[i]);
-         humanPileCards[i].setVisible(false);
+          westP.add(humanPileCards[i]);
+          humanPileCards[i].setVisible(false);
       } 
        for (int j = 0; j < fEngine.deckDealer.getListOfCards().size(); j ++){
                     if (j == humanPileCards.length){
@@ -257,7 +222,6 @@ public class GoFish  extends JFrame implements ActionListener
           try {
             String searchString = value.toLowerCase();
             Icon icon = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\larger Y\\"+searchString+".jpg"); //Try a less ... demanding path.. heh.
-            //Icon icon = new ImageIcon(getClass().getResource("cardPics\\"+searchString+".jpg"));  
             humanHand[i].setIcon(icon);
             humanHand[i].setPreferredSize(new Dimension(75, 98));
           } 
@@ -308,8 +272,8 @@ public class GoFish  extends JFrame implements ActionListener
       if (fEngine.humanPileList.size() > 0){
         for (int i = 0; i < fEngine.humanPileList.size(); i ++){
             for (int j = 0; j < humanPileCards.length; j ++){
-            System.out.println("humanPileCards[j].getIcon().toString() is " + humanPileCards[j].getIcon().toString());
-            System.out.println("fEngine.humanPileList.get(i).toString().toLowerCase()) is " + fEngine.humanPileList.get(i).toString().toLowerCase());
+            //System.out.println("humanPileCards[j].getIcon().toString() is " + humanPileCards[j].getIcon().toString());
+            //System.out.println("fEngine.humanPileList.get(i).toString().toLowerCase()) is " + fEngine.humanPileList.get(i).toString().toLowerCase());
              if (!humanPileCards[j].isVisible() && humanPileCards[j].getIcon().toString().contains(fEngine.humanPileList.get(i).toString().toLowerCase())){
                  humanPileCards[j].setVisible(true);
                  fEngine.humanPileListForLoading.add(fEngine.humanPileList.get(i));
@@ -325,13 +289,12 @@ public class GoFish  extends JFrame implements ActionListener
       if (fEngine.computerPileList.size() > 0){
         for (int i = 0; i < fEngine.computerPileList.size(); i ++){
             for (int j = 0; j < computerPileCards.length; j ++){
-            System.out.println("computerPileCards[j].getIcon().toString() is " + computerPileCards[j].getIcon().toString());
-            System.out.println("fEngine.computerPileList.get(i).toString().toLowerCase()) is " + fEngine.computerPileList.get(i).toString().toLowerCase());
+            //System.out.println("computerPileCards[j].getIcon().toString() is " + computerPileCards[j].getIcon().toString());
+            //System.out.println("fEngine.computerPileList.get(i).toString().toLowerCase()) is " + fEngine.computerPileList.get(i).toString().toLowerCase());
              if (!computerPileCards[j].isVisible() && computerPileCards[j].getIcon().toString().contains(fEngine.computerPileList.get(i).toString().toLowerCase())){
                  computerPileCards[j].setVisible(true);
                  fEngine.computerPileListForLoading.add(fEngine.computerPileList.get(i));
                  fEngine.computerPileList.remove(i);//So duplicates aren't re-added. This list will be updated.
-                
                  break;
              }
             }
@@ -438,7 +401,7 @@ public class GoFish  extends JFrame implements ActionListener
    }
    public void removeHumanDuplicate(String value){
          fEngine.feedBack.append("\n"+"["+fEngine.turnCounter+"] "+"Human placing down pair ("+ value+")");
-         fEngine.handHuman.removePair(value);//Why two paremeter? lol.
+         fEngine.handHuman.removePair(value);
          fEngine.humanPile.append(" ("+value+")");
          fEngine.humanPileList.add(value);
          fEngine.humanPoints += 1;
@@ -458,9 +421,6 @@ public class GoFish  extends JFrame implements ActionListener
             "fileInfo", JOptionPane.ERROR_MESSAGE );
       }
    }
-   
-   
-   
    
    public void ReadBSAFile()
    {
@@ -483,8 +443,8 @@ public class GoFish  extends JFrame implements ActionListener
             fEngineRead.humanPile.append ( (String) sin.readUTF() );
             fEngineRead.computerPile.append ( (String) sin.readUTF() );
             fEngineRead.turnCounterFB.append( (String) sin.readUTF() );
-            fEngineRead.computerPileList = ( (ArrayList) sin.readObject() );//Hm?
-            fEngineRead.humanPileList = ( (ArrayList) sin.readObject() );//Hm?
+            fEngineRead.computerPileList = ( (ArrayList) sin.readObject() );
+            fEngineRead.humanPileList = ( (ArrayList) sin.readObject() );
             
             fEngine = fEngineRead;
             fEngine.deckDealer = fEngineRead.deckDealer;
@@ -581,7 +541,6 @@ public class GoFish  extends JFrame implements ActionListener
        JPanel aPanel = new JPanel();  
        aPanel.setLayout(new FlowLayout());
        aPanel.add(scroll);
-       //JScrollPane  scrollNewWindow = new JScrollPane(turnCounterFBArea);
         frame.getContentPane().add(BorderLayout.CENTER, aPanel);
         frame.pack();
         frame.setLocationByPlatform(true);
@@ -589,22 +548,15 @@ public class GoFish  extends JFrame implements ActionListener
         frame.setResizable(false);
        deckHandWindowOpen = true;
        
-       
-
         frame.addWindowListener(new WindowAdapter(){
                         public void windowClosing(WindowEvent e){
-                                //System.exit(0);
                                 cpuHand.setSelected(false);
                                 dckHand.setSelected(false);
                                 deckHandWindowOpen = false;
                                 frame.setVisible(false);
                                 frame.dispose();
-                                //frame.removeAll();
                         }
                     });
-
-
-
    }
    public void openWindowsForTurnInfo(){
        
@@ -626,22 +578,14 @@ public class GoFish  extends JFrame implements ActionListener
         frame.setVisible(true);
         frame.setResizable(false);
        isTurnLogWindowOpen = true;
-       
-       
-
         frame.addWindowListener(new WindowAdapter(){
                         public void windowClosing(WindowEvent e){
-                                //System.exit(0);
                                 trnLog.setSelected(false);
                                  isTurnLogWindowOpen = false;
                                 frame.setVisible(false);
                                 frame.dispose();
-                                //frame.removeAll();
                         }
                     });
-
-
-
    }  
       
    public void openWindowsForPlayerPile(){
@@ -657,15 +601,12 @@ public class GoFish  extends JFrame implements ActionListener
        JPanel aPanel = new JPanel();  
        aPanel.setLayout(new FlowLayout());
        aPanel.add(scrollThree);
-       //JScrollPane  scrollNewWindow = new JScrollPane(turnCounterFBArea);
         frame.getContentPane().add(BorderLayout.CENTER, aPanel);
         frame.pack();
         frame.setLocationByPlatform(true);
         frame.setVisible(true);
         frame.setResizable(false);
        isPlayerPileWindowOpen = true;
-       
-       
         frame.addWindowListener(new WindowAdapter(){
                         public void windowClosing(WindowEvent e){
                                 //System.exit(0);
@@ -691,7 +632,6 @@ public class GoFish  extends JFrame implements ActionListener
        JPanel aPanel = new JPanel();  
        aPanel.setLayout(new FlowLayout());
        aPanel.add(scrollFour);
-       //JScrollPane  scrollNewWindow = new JScrollPane(turnCounterFBArea);
         frame.getContentPane().add(BorderLayout.CENTER, aPanel);
         frame.pack();
         frame.setLocationByPlatform(true);
@@ -699,21 +639,14 @@ public class GoFish  extends JFrame implements ActionListener
         frame.setResizable(false);
        isallDebugWindowOpen = true;
        
-       
-
         frame.addWindowListener(new WindowAdapter(){
                         public void windowClosing(WindowEvent e){
-                                //System.exit(0);
                                 allDebug.setSelected(false);
                                 isallDebugWindowOpen = false;
                                 frame.setVisible(false);
                                 frame.dispose();
-                                //frame.removeAll();
                         }
                     });
-
-
-
    }
    public class CheckBoxListener implements ItemListener
    {  
@@ -747,8 +680,5 @@ public class GoFish  extends JFrame implements ActionListener
              }
          }
       }
-   }
-   
-   
+   }  
 }
-   
