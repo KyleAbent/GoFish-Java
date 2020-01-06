@@ -33,7 +33,10 @@ public class fishEngine  implements Serializable
    
    protected  static StringBuilder feedBack = new StringBuilder(); 
    protected  static StringBuilder humanPile = new StringBuilder(""); 
+   protected  ArrayList<String> computerPileList = new ArrayList<String>();
    protected  static StringBuilder computerPile = new StringBuilder(""); 
+   protected  ArrayList<String> humanPileList = new ArrayList<String>();
+   protected  static StringBuilder debugInfo = new StringBuilder(""); 
  
    //-------JButton------//
    private JButton goldFishBtn = new JButton("GoldFish");
@@ -53,12 +56,16 @@ public class fishEngine  implements Serializable
    }
    
    public void resetFeedbacks(){
+        computerPileList = new ArrayList<String>();
+        humanPileList = new ArrayList<String>();
         feedBack = new StringBuilder();
         humanPile = new StringBuilder(""); 
         computerPile = new StringBuilder(""); 
         turnCounterFB = new StringBuilder(""); 
-        StringBuilder computerPile = new StringBuilder(""); 
+        computerPile = new StringBuilder(""); 
         ComputerPairedCards = new ArrayList<String>();
+        humanPileList = new ArrayList<String>();
+        computerPileList = new ArrayList<String>();
    }
    
    
@@ -85,7 +92,7 @@ public class fishEngine  implements Serializable
    public void createDeck()
    {
       deckDealer.CreateDeck(); 	
-      System.out.println("Size of Deck: " + this.deckDealer.getSize());
+      debugInfo.append("\nSize of Deck: " + this.deckDealer.getSize());
       for (int i = 0; i <5; i++) 
       {
       // Create human && computer deck
@@ -153,12 +160,13 @@ public class fishEngine  implements Serializable
       match = getIsHumanMatch();
       if (!computerTurn && humanTurn && !cheating )//&& !pair)
       {
-         System.out.println("Match is " + match);
+         debugInfo.append("\nMatch is " + match);
          if (!isZero && match)
          {
             feedBack.append( "\n"+"["+turnCounter+"] "+"Match! Go Again!");
 
             humanPile.append(" ("+valueToScan+")");
+            humanPileList.add(valueToScan);
             removeCardHumanComputer();
             match = false;
             humanPoints = humanPoints + 1;
@@ -201,11 +209,12 @@ public class fishEngine  implements Serializable
          //check for duplicates
          for (int j = i + 1; j < this.handComputer.getHand().size(); j ++){
              if (this.handComputer.handComputer.get(i).equals(this.handComputer.handComputer.get(j))) {
-                 System.out.println("[doDuplicatesFirst] Found Matching Numbers: " + this.handComputer.handComputer.get(i));
+                 debugInfo.append("\n[doDuplicatesFirst] Found Matching Numbers: " + this.handComputer.handComputer.get(i));
                  computerPoints = computerPoints + 1; 
                  feedBack.append("\n"+"["+turnCounter+"] "+"Computer placing down pair ("+ this.handComputer.handComputer.get(i)+")");
                  String value = this.handComputer.handComputer.get(i);
                  computerPile.append(" ("+value+")");
+                 computerPileList.add(value);
                  handComputer.removePair(value);
                  break;//One pair at the moment
              }
@@ -215,7 +224,7 @@ public class fishEngine  implements Serializable
    }
    public void computerInput()
    {
-      System.out.println("Computer Hand Prior to turn: " + this.getComputerHandDisplay());
+      debugInfo.append("\nComputer Hand Prior to turn: " + this.getComputerHandDisplay());
       turnManage();
       setScanValue("0");
       match = false;
@@ -242,17 +251,17 @@ public class fishEngine  implements Serializable
           if (!getisDeckDealerEmpty()){
             feedBack.append("\n"+"["+turnCounter+"] "+"Human Hand Empty, Drawing Card for human then continuing computer turn");
             handHuman.addCard(handComputer, deckDealer);
-            System.out.println("Human Hand Empty, Drawing Card for human then continuing computer turn");
+            debugInfo.append("\nHuman Hand Empty, Drawing Card for human then continuing computer turn");
           }
           else{
               feedBack.append("\n"+"["+turnCounter+"] "+"Human Hand Empty, Deck Empty, Computer Turn. Error!");
-              System.out.println("Human Hand Empty, Deck Empty, Computer Turn. Error!");
+              debugInfo.append("\nHuman Hand Empty, Deck Empty, Computer Turn. Error!");
           }
       }
       //if (!computerTurn) {
          //return computerTurn;}
-      System.out.println("\ncomputerPoints = " + computerPoints + ", humanPoints = " + humanPoints);
-      System.out.println("\nturnCounter = " + turnCounter);
+      debugInfo.append("\ncomputerPoints = " + computerPoints + ", humanPoints = " + humanPoints);
+      debugInfo.append("\nturnCounter = " + turnCounter);
        //Grab a random number based on difficulty level
       doDuplicatesFirst();
       setComputerNumber();
@@ -276,6 +285,7 @@ public class fishEngine  implements Serializable
          removeCardHumanComputer();
          ComputerPairedCards.add( valueToScan ); ComputerPairedCards.add( valueToScan );
          computerPile.append(" ("+valueToScan+")");
+         computerPileList.add(valueToScan);
       }
       else
       { 
@@ -291,7 +301,7 @@ public class fishEngine  implements Serializable
       }
       
       //return computerTurn;
-      System.out.println("Computer Hand Post to turn: " + this.getComputerHandDisplay());
+      debugInfo.append("\nComputer Hand Post to turn: " + this.getComputerHandDisplay());
       if (computerTurn)
       { 
          computerInput() ;
@@ -346,15 +356,15 @@ public class fishEngine  implements Serializable
       }
       if (getScanValue() == "0" && getisDeckDealerEmpty()){
           setComputerNumber(); // how long can this recursion go? o_O dividing by ZERO!!!
-          System.out.println("Uhh.. Computer is calling 0 and the deck is empty.. divide by 0 recursion!!!!");
+          debugInfo.append("\nUhh.. Computer is calling 0 and the deck is empty.. divide by 0 recursion!!!!");
       }
    }
    public boolean getIsComputerMatched()
    {
        //If zero then draw card
-       System.out.println("getIsComputerMatched");
-       System.out.println("----------------------");
-       System.out.println("valueToScan is " + valueToScan);
+       debugInfo.append("\ngetIsComputerMatched");
+       debugInfo.append("\n----------------------");
+       debugInfo.append("\nvalueToScan is " + valueToScan);
        if (valueToScan == "0"){
            return false;
        }
@@ -363,17 +373,17 @@ public class fishEngine  implements Serializable
           
       for (int i = 0; i < handHuman.getHand().size(); i++) 
       {
-          System.out.println("handHuman.getHand().get(i) is " + handHuman.getHand().get(i));
+          debugInfo.append("\nhandHuman.getHand().get(i) is " + handHuman.getHand().get(i));
          if ( !hasPicked && handHuman.getHand().get(i).equals(valueToScan))
          { 
             //handComputer.MatchPicked(getScanNumber(), hasPicked );
             //feedBack.append( "\n(computer):Do you have a " + valueToScan + "?" + "(matched)");
-            System.out.println("Match is True!!!");
+            debugInfo.append("\nMatch is True!!!");
             match = true;
             hasPicked = true;
          }
          else{
-             System.out.println("Match is false!!!");
+             debugInfo.append("\nMatch is false!!!");
          }
       }
       return match;
@@ -453,26 +463,27 @@ public class fishEngine  implements Serializable
       turnCounter = turnCounter + 1;
                // setComputerTurn(true); 
       humanPile.append( value ); humanPile.append( value );
+      humanPileList.add(value);
    }
    public boolean getIsHumanMatch()
    {
-      System.out.println("getIsHumanMatch");
+      debugInfo.append("\ngetIsHumanMatch");
       boolean isMatch = false;
       if (valueToScan == "0"){
           return isMatch;
       }
       for (int i = 0; i < handComputer.getHand().size(); i++) 
       {
-         System.out.println("----------------------------------------");
-         System.out.println("handComputer.getHand().get(i) is " + handComputer.getHand().get(i));
-         System.out.println("valueToScan is " + valueToScan);
+         debugInfo.append("\n----------------------------------------");
+         debugInfo.append("\nhandComputer.getHand().get(i) is " + handComputer.getHand().get(i));
+         debugInfo.append("\nvalueToScan is " + valueToScan);
          if (handComputer.getHand().get(i).equals(valueToScan))
          {
             isMatch = true;
-            System.out.println("isMatch is " + isMatch);
+            debugInfo.append("\nisMatch is " + isMatch);
          }
       }
-      System.out.println("----------------------------------------");
+      debugInfo.append("\n----------------------------------------");
       return isMatch;
    }
   
@@ -483,21 +494,17 @@ public class fishEngine  implements Serializable
  ///////////////////////////////////////////////////////////////////////////
  ///////////////////////// Misc///////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////// 
-   //public void print(toPrint){
-       //System.out.println(toPrint);
-   //}
-
    public void removeCardHumanComputer()
    {
-    System.out.println("-----------------------------");
-    System.out.println("removeCardHumanComputer");
-    System.out.println("valueToScan is " + valueToScan);
+    debugInfo.append("\n-----------------------------");
+    debugInfo.append("\nremoveCardHumanComputer");
+    debugInfo.append("\nvalueToScan is " + valueToScan);
       for (int i = 0; i < handHuman.getHand().size(); i++) 
       {
-         System.out.println("humanHand card is " + handHuman.getHand().get(i));
+         debugInfo.append("\nhumanHand card is " + handHuman.getHand().get(i));
          if (handHuman.getHand().get(i).equals(valueToScan))
          {
-            System.out.println("removing from human card # " + handHuman.getHand().get(i));
+            debugInfo.append("\nremoving from human card # " + handHuman.getHand().get(i));
             handHuman.getHand().remove(i);
             handHuman.getHand().trimToSize();
             break;
@@ -506,19 +513,19 @@ public class fishEngine  implements Serializable
         
       for (int i = 0; i < handComputer.getHand().size(); i++) 
       {
-         System.out.println("handComputer card is " + handComputer.getHand().get(i));
+         debugInfo.append("\nhandComputer card is " + handComputer.getHand().get(i));
          if (handComputer.getHand().get(i).equals(valueToScan))
          {
-            System.out.println("removing from computer card # " + handComputer.getHand().get(i));
+            debugInfo.append("\nremoving from computer card # " + handComputer.getHand().get(i));
             handComputer.getHand().remove(i);
             handComputer.getHand().trimToSize();
             break;
          }
          else{
-             System.out.println("Computer NOT Match!");
+             debugInfo.append("\nComputer NOT Match!");
          }
       }  
-      System.out.println("-----------------------------");
+      debugInfo.append("\n-----------------------------");
    }
    public  boolean checkforEmptyHands()
    {

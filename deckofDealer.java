@@ -14,7 +14,16 @@ public class deckofDealer implements Serializable
    { 
      deckDealer = new ArrayList<String>();
    }
-   
+   public ArrayList<String> getListOfCards(){
+       ArrayList<String> tmp = new ArrayList<String>();
+      for (int index = 0; index < 4; index++)
+      {
+         tmp.add("Ace");tmp.add("2");tmp.add("3");tmp.add("4");tmp.add("5");
+         tmp.add("6");tmp.add("7");tmp.add("8");tmp.add("9");tmp.add("10");
+         tmp.add("Jack");tmp.add("Queen");tmp.add("King");
+      }
+      return tmp;
+   }
    public void CreateDeck()
    {  
       for (int index = 0; index < 4; index++)

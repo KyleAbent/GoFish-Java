@@ -15,6 +15,12 @@ public class GoFish  extends JFrame implements ActionListener
    JFileChooser jfc = new JFileChooser(gFile);  
    
    JMenuBar jmb = new JMenuBar();
+   JMenu debugM = new JMenu("Debug");
+   private JCheckBoxMenuItem cpuHand = new JCheckBoxMenuItem("Show Computer Hand"); 
+   private JCheckBoxMenuItem dckHand = new JCheckBoxMenuItem("Show Deck Dealer Hand"); 
+   private JCheckBoxMenuItem trnLog = new JCheckBoxMenuItem("Show Turn Log"); 
+   private JCheckBoxMenuItem playerPiles = new JCheckBoxMenuItem("Show Player Piles");
+   private JCheckBoxMenuItem allDebug = new JCheckBoxMenuItem("Show Turn Match Scan");
    JMenu aboutM = new JMenu("File");
    JMenuItem newF = new JMenuItem("New");
    JMenuItem openF = new JMenuItem("Open");
@@ -31,12 +37,12 @@ public class GoFish  extends JFrame implements ActionListener
    private ObjectOutputStream sout;
    private ObjectInputStream sin;
    fishEngine fEngine = new fishEngine();
-   private JTextArea turnCounterFBArea = new JTextArea("", 25, 30);  
-   //protected  JTextArea feedBack = new JTextArea("", 25, 30); 
-   protected  JTextPane feedBack = new JTextPane();//("", 25, 30); 
-
-   protected  JTextArea pile = new JTextArea("", 25, 30); 
    
+   private JTextArea turnCounterFBArea = new JTextArea("", 25, 30);  
+   protected  JTextArea feedBack = new JTextArea("", 25, 30);//("", 25, 30); 
+   protected  JTextArea pile = new JTextArea("", 25, 30); 
+   protected  JTextArea allprints = new JTextArea("", 25, 30); 
+
    private JButton endTurn = new JButton("GoFish");
    private JButton newGame = new JButton("newGame");
    
@@ -44,18 +50,27 @@ public class GoFish  extends JFrame implements ActionListener
    JScrollPane  scroll = new JScrollPane(turnCounterFBArea);
    JScrollPane  scrollTwo = new JScrollPane(feedBack);
    JScrollPane  scrollThree = new JScrollPane(pile);
+   JScrollPane  scrollFour = new JScrollPane(allprints);
    
    
    JButton[] humanHand = new JButton[10];
+   JButton[] computerHandBacks = new JButton[10];
+   JButton[] humanPileCards = new JButton[30];
+   JButton[] computerPileCards = new JButton[30];
+   //Icon[] computerHandPiles = new ImageIcon[30];
+   JLabel  hmnPileCards = new JLabel("Human Pair Pile: ");  
+   JLabel  cppuCards = new JLabel("Computer Pair Pile: ");  
    
    JLabel  cCards = new JLabel("45 cards left in the deck");  
    JLabel  eTitle = new JLabel("Computer Pts:)");   
    JLabel  cPts = new JLabel(" "); 
    JLabel  wTitle = new JLabel("Human Pts:)"); 
    JLabel  hPts = new JLabel(" "); 
-   private JCheckBox cpuHand = new JCheckBox("Show Computer Hand"); 
-   private JCheckBox dckHand = new JCheckBox("Show Deck Dealer Hand"); 
    private int humanChoseForDup = 0;
+   private boolean deckHandWindowOpen = false;
+   private boolean isTurnLogWindowOpen = false;
+   private boolean isPlayerPileWindowOpen = false;
+   private boolean isallDebugWindowOpen = false;
  
    
    public static void main(String[] args)
@@ -66,6 +81,7 @@ public class GoFish  extends JFrame implements ActionListener
       GF.setSize(900,800);
       GF.setVisible(true);
       GF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+      GF.setExtendedState(JFrame.MAXIMIZED_BOTH);
       fishEngine fEngine = new fishEngine();
    }
  
@@ -83,29 +99,44 @@ public class GoFish  extends JFrame implements ActionListener
       gameM.add(LoadG);
       LoadG.addActionListener(this);
       
+      
       jmb.add(aboutM);
       jmb.add(gameM);
-      northP.add(cpuHand);
-      northP.add(dckHand);
+      
+      
+      debugM.add(cpuHand);
+      debugM.add(dckHand);
+      debugM.add(trnLog);
+      debugM.add(playerPiles);
+      debugM.add(allDebug);
+      jmb.add(debugM);
+
       CheckBoxListener myCheckBoxListener = new CheckBoxListener();
       cpuHand.addItemListener(myCheckBoxListener);
-      cpuHand.setSelected(false);
+      cpuHand.setSelected(true);
       dckHand.addItemListener(myCheckBoxListener);
-      dckHand.setSelected(false);
+      dckHand.setSelected(true);
+      trnLog.addItemListener(myCheckBoxListener);
+      trnLog.setSelected(true);
+      playerPiles.addItemListener(myCheckBoxListener);
+      playerPiles.setSelected(true);
+      allDebug.addItemListener(myCheckBoxListener);
+      allDebug.setSelected(true);
       northP.add(jmb);
       
-      centerP.setLayout(new GridLayout(2,2)); // 2, 2
-      centerP.add(scroll);
-      centerP.add(scrollTwo);
-      centerP.add(scrollThree);
-      centerP.add(cCards);
+      centerP.setLayout(new GridLayout(10,3)); // 2, 2
+
+      
+      eastP.add(cppuCards);
+      westP.add(hmnPileCards);
+      
       
       newGame.addActionListener(this);
       
       southP.setLayout(new FlowLayout()); // new GridLayout(10,1) // 2, 2
       
-      eastP.setLayout(new GridLayout(4,1)); // 4,1 GridBagLayout??
-      westP.setLayout(new GridLayout(4,1)); // 4,1 GridBagLayout??
+      eastP.setLayout(new FlowLayout()); // 4,1 GridBagLayout??
+      westP.setLayout(new FlowLayout()); // 4,1 GridBagLayout??
       
       northP.setLayout(new FlowLayout());
       myContainer.add(northP, BorderLayout.NORTH);
@@ -113,10 +144,13 @@ public class GoFish  extends JFrame implements ActionListener
       myContainer.add(southP, BorderLayout.SOUTH);
       myContainer.add(westP, BorderLayout.WEST);
       myContainer.add(eastP, BorderLayout.EAST);
+      westP.setBackground(Color.WHITE);
+      centerP.setBackground(Color.lightGray);
+      eastP.setBackground(Color.WHITE);
       southP.add(endTurn);
       endTurn.addActionListener(this);
-      Icon icon = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\larger Y\\gofish.jpg"); //Try a less ... demanding path.. heh.
-      endTurn.setIcon(icon);
+      Icon humanHandPiles = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\larger Y\\gofish.jpg"); //Try a less ... demanding path.. heh.
+      endTurn.setIcon(humanHandPiles);
       endTurn.setPreferredSize(new Dimension(75, 98));
       for(int i = 0; i < 10; i++) {
          humanHand[i] = new JButton(String.valueOf(i));
@@ -124,33 +158,95 @@ public class GoFish  extends JFrame implements ActionListener
          southP.add(humanHand[i]);
          humanHand[i].addActionListener(this);
       }
+      Icon backofCard = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\larger Y\\back.jpg"); //Try a less ... demanding path.. heh.
+      for(int i = 0; i < 10; i++) {
+          computerHandBacks[i] = new JButton();
+          //computerHandPiles[i].setPreferredSize(new Dimension(73, 98));
+          computerHandBacks[i].setPreferredSize(new Dimension(10, 10));
+          computerHandBacks[i].setIcon(backofCard);
+         //computerHandPiles[i] = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\larger Y\\back.jpg");
+         //humanHand[i].setPreferredSize(new Dimension(73, 98));
+         eastP.add(computerHandBacks[i]);
+         //humanHand[i].addActionListener(this);
+      } 
+      for(int i = 0; i < 30; i++) {
+          humanPileCards[i] = new JButton();
+          //computerHandPiles[i].setPreferredSize(new Dimension(73, 98));
+          //String = deckDealer.get....
+
+          //Icon backofCard = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\larger Y\\back.jpg"); //Try a less ... demanding path.. heh.
+          humanPileCards[i].setPreferredSize(new Dimension(10, 10));
+          
+         westP.add(humanPileCards[i]);
+         humanPileCards[i].setVisible(false);
+      } 
+       for (int j = 0; j < fEngine.deckDealer.getListOfCards().size(); j ++){
+                    if (j == 30){
+          break;
+          }
+          String crd = fEngine.deckDealer.getListOfCards().get(j).toString().toLowerCase();
+          System.out.println("crd is " + crd);
+          Icon whichCrd = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\"+crd+".jpg"); //Try a less ... demanding path.. heh.
+          humanPileCards[j].setIcon(whichCrd);
+        }
       
+      centerP.add(cppuCards);
+        for(int i = 0; i < 30; i++) {
+            computerPileCards[i] = new JButton();
+            computerPileCards[i].setPreferredSize(new Dimension(73, 98));
+            String crd = fEngine.deckDealer.getListOfCards().get(i).toString().toLowerCase();
+            System.out.println("crd is " + crd);
+            Icon whichCrd = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\"+crd+".jpg"); //Try a less ... demanding path.. heh.
+            computerPileCards[i].setIcon(whichCrd);
+            computerPileCards[i].setVisible(false);
+            centerP.add(computerPileCards[i]);
+        }   
       westP.add(wTitle);
       westP.add(hPts);
-      westP.setLayout(new GridLayout(4,5));
+      westP.setLayout(new GridLayout(10,5));
       eastP.add(eTitle);
       eastP.add(cPts);
       eastP.setLayout(new GridLayout(4,5));
-
+      centerP.add(cCards);
        startFresh();
      
    }
    public void startFresh(){
-       System.out.println("Size of Deck: " + fEngine.deckDealer.getSize());
         fEngine.deckDealer.ResetDeck();
         fEngine.handComputer.resetHand();
         fEngine.handHuman.resetHand();
         fEngine.createDeck();
-        System.out.println("Size of Deck: " + fEngine.deckDealer.getSize());
         fEngine.resetFeedbacks();
+        for (int i = 0; i < computerPileCards.length; i++){
+            computerPileCards[i].setVisible(false);
+        }
+        for (int i = 0; i < humanPileCards.length; i++){
+            humanPileCards[i].setVisible(false);
+        }
         fEngine.humanPoints = 0;
         fEngine.computerPoints = 0;
         fEngine.turnIgnition();
         updateGUI();
-        System.out.println("Size of Deck: " + fEngine.deckDealer.getSize());
    }
    public void updateGUI()
    {
+      int handSize = fEngine.handComputer.getHand().size();
+      if (fEngine.handComputer.getisEmpty()){
+        for(int i = 0; i<9; i++)
+        {
+           computerHandBacks[i].setVisible(false);   
+
+        }
+      }
+      else{//Computer hand not empty
+        for(int i = 0; i<10; i++)
+        {
+           boolean shouldShow =  i<handSize;
+           //fEngine.debugInfo.append("\n I is " + i + " , handSize is " + handSize + " i < hanSize is " + shouldShow); too spammy
+           computerHandBacks[i].setVisible(shouldShow);   
+
+        }
+      }
       
       for(int i = 0; i<fEngine.handHuman.getHand().size(); i++)
       {
@@ -160,7 +256,6 @@ public class GoFish  extends JFrame implements ActionListener
          humanHand[i].setBackground(null);
           try {
             String searchString = value.toLowerCase();
-            //System.out.println("searchString is " + searchString);
             Icon icon = new ImageIcon("C:\\Users\\kylea\\Documents\\GoFish-Java\\cardPics\\larger Y\\"+searchString+".jpg"); //Try a less ... demanding path.. heh.
             //Icon icon = new ImageIcon(getClass().getResource("cardPics\\"+searchString+".jpg"));  
             humanHand[i].setIcon(icon);
@@ -178,10 +273,7 @@ public class GoFish  extends JFrame implements ActionListener
       {
          //check for duplicates
          for (int j = i + 1; j < fEngine.handHuman.getHand().size(); j ++){
-             //System.out.println("humanHand[i] is " + humanHand[i].getText());
-             //System.out.println("humanHand[j] is " + humanHand[j].getText());
              if (humanHand[i].isVisible() && humanHand[i].getText().equals((humanHand[j].getText()))) {
-                 //System.out.println("Found Matching Numbers: " + humanHand[i].getText());
                  humanHand[i].setBackground(Color.RED);
                  humanHand[j].setBackground(Color.RED);
              }
@@ -190,14 +282,13 @@ public class GoFish  extends JFrame implements ActionListener
       }
       
       pile.setText("human Pile" + fEngine.humanPile.toString() + "\n computer Pile" + fEngine.computerPile.toString());
+      allprints.setText(fEngine.debugInfo.toString());
       turnCounterFBArea.setText(fEngine.turnCounterFB.toString());
       if (cpuHand.isSelected()){
           fEngine.turnCounterFB.append("\n["+fEngine.turnCounter+"] "+"Computer Hand: " + fEngine.getComputerHandDisplay()+"\n");
-          System.out.println("Computer Hand: "+fEngine.getComputerHandDisplay());
       }
       if (dckHand.isSelected()){
           fEngine.turnCounterFB.append("\n"+"["+fEngine.turnCounter+"] "+"Deck Hand: " + fEngine.getdeckHandDisplay()+"\n");
-          System.out.println("Deck Hand:" + fEngine.getComputerHandDisplay());
       }
       feedBack.setText(fEngine.feedBack.toString());
       
@@ -212,6 +303,43 @@ public class GoFish  extends JFrame implements ActionListener
       hPts.setText(String.valueOf(fEngine.humanPoints));
       cPts.setText(String.valueOf(fEngine.computerPoints));
       cCards.setText(" " + fEngine.deckDealer.getDeck().size() + " cards left in the deck");  
+      
+      //Human pair
+      if (fEngine.humanPileList.size() > 0){
+        for (int i = 0; i < fEngine.humanPileList.size(); i ++){
+            for (int j = 0; j < humanPileCards.length; j ++){
+            System.out.println("humanPileCards[j].getIcon().toString() is " + humanPileCards[j].getIcon().toString());
+            System.out.println("fEngine.humanPileList.get(i).toString().toLowerCase()) is " + fEngine.humanPileList.get(i).toString().toLowerCase());
+             if (!humanPileCards[j].isVisible() && humanPileCards[j].getIcon().toString().contains(fEngine.humanPileList.get(i).toString().toLowerCase())){
+                 humanPileCards[j].setVisible(true);
+                 break; 
+             }
+             else{
+                 //humanPileCards[i].setVisible(false);
+             }
+            }
+
+         }
+      }
+      
+      //Coomputer pair
+      if (fEngine.computerPileList.size() > 0){
+        for (int i = 0; i < fEngine.computerPileList.size(); i ++){
+            for (int j = 0; j < computerPileCards.length; j ++){
+            System.out.println("computerPileCards[j].getIcon().toString() is " + computerPileCards[j].getIcon().toString());
+            System.out.println("fEngine.computerPileList.get(i).toString().toLowerCase()) is " + fEngine.computerPileList.get(i).toString().toLowerCase());
+             if (!computerPileCards[j].isVisible() && computerPileCards[j].getIcon().toString().contains(fEngine.computerPileList.get(i).toString().toLowerCase())){
+                 computerPileCards[j].setVisible(true);
+                 break;
+             }
+             else{
+                //computerPileCards[i].setVisible(false);
+             }
+            }
+
+         }
+      }
+
    }
    public void actionPerformed(ActionEvent e)
    {
@@ -244,14 +372,10 @@ public class GoFish  extends JFrame implements ActionListener
          fEngine.humanAlgorithm();
          //fEngine.humanInput(); 
          updateGUI();
-         System.out.println("GoFish");
       }
       else if (e.getSource() == newGame)
       {
          System.out.println("New Game Selected");
-         //fEngine.turnIgnition(); 
-         //fishEngine fEngine = new fishEngine();
-         //fEngine.turnIgnition();
          fEngine.humanInput(); 
          
          for(int i = 0; i < fEngine.gethandHuman().getHand().size(); i++) {
@@ -359,6 +483,8 @@ public class GoFish  extends JFrame implements ActionListener
             fEngineRead.humanPile.append ( (String) sin.readUTF() );
             fEngineRead.computerPile.append ( (String) sin.readUTF() );
             fEngineRead.turnCounterFB.append( (String) sin.readUTF() );
+            fEngineRead.computerPileList.add( (String) sin.readUTF() );//Hm?
+            fEngineRead.humanPileList.add( (String) sin.readUTF() );//Hm?
             
             fEngine = fEngineRead;
             fEngine.deckDealer = fEngineRead.deckDealer;
@@ -368,6 +494,8 @@ public class GoFish  extends JFrame implements ActionListener
             fEngine.humanPile = fEngineRead.humanPile;
             fEngine.computerPile = fEngineRead.computerPile;
             fEngine.turnCounterFB = fEngineRead.turnCounterFB;
+            fEngine.computerPileList = fEngineRead.computerPileList;
+            fEngine.humanPileList = fEngineRead.humanPileList;
 
             sin.close();
             updateGUI();
@@ -415,6 +543,8 @@ public class GoFish  extends JFrame implements ActionListener
             sout.writeUTF(fEngine.humanPile.toString());
             sout.writeUTF(fEngine.computerPile.toString());
             sout.writeUTF(fEngine.turnCounterFB.toString());
+            sout.writeUTF(fEngine.computerPileList.toString());
+            sout.writeUTF(fEngine.humanPileList.toString());
             JOptionPane.showMessageDialog( this, "File " + gFile + " saved" );
             sout.close();   
          } 
@@ -436,19 +566,183 @@ public class GoFish  extends JFrame implements ActionListener
    
    }
    
+   public void openWindowsForDeckInfo(){
+       
+       JFrame frame = new JFrame("DeckInfo");
+       frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        try 
+           {
+              UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+           } catch (Exception e) {
+              e.printStackTrace();
+           }
+       JPanel aPanel = new JPanel();  
+       aPanel.setLayout(new FlowLayout());
+       aPanel.add(scroll);
+       //JScrollPane  scrollNewWindow = new JScrollPane(turnCounterFBArea);
+        frame.getContentPane().add(BorderLayout.CENTER, aPanel);
+        frame.pack();
+        frame.setLocationByPlatform(true);
+        frame.setVisible(true);
+        frame.setResizable(false);
+       deckHandWindowOpen = true;
+       
+       
+
+        frame.addWindowListener(new WindowAdapter(){
+                        public void windowClosing(WindowEvent e){
+                                //System.exit(0);
+                                cpuHand.setSelected(false);
+                                dckHand.setSelected(false);
+                                deckHandWindowOpen = false;
+                                frame.setVisible(false);
+                                frame.dispose();
+                                //frame.removeAll();
+                        }
+                    });
+
+
+
+   }
+   public void openWindowsForTurnInfo(){
+       
+       JFrame frame = new JFrame("TurnCounter");
+       frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        try 
+           {
+              UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+           } catch (Exception e) {
+              e.printStackTrace();
+           }
+       JPanel aPanel = new JPanel();  
+       aPanel.setLayout(new FlowLayout());
+       aPanel.add(scrollTwo);
+       //JScrollPane  scrollNewWindow = new JScrollPane(turnCounterFBArea);
+        frame.getContentPane().add(BorderLayout.CENTER, aPanel);
+        frame.pack();
+        frame.setLocationByPlatform(true);
+        frame.setVisible(true);
+        frame.setResizable(false);
+       isTurnLogWindowOpen = true;
+       
+       
+
+        frame.addWindowListener(new WindowAdapter(){
+                        public void windowClosing(WindowEvent e){
+                                //System.exit(0);
+                                trnLog.setSelected(false);
+                                 isTurnLogWindowOpen = false;
+                                frame.setVisible(false);
+                                frame.dispose();
+                                //frame.removeAll();
+                        }
+                    });
+
+
+
+   }  
+      
+   public void openWindowsForPlayerPile(){
+       
+       JFrame frame = new JFrame("Player Piles");
+       frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        try 
+           {
+              UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+           } catch (Exception e) {
+              e.printStackTrace();
+           }
+       JPanel aPanel = new JPanel();  
+       aPanel.setLayout(new FlowLayout());
+       aPanel.add(scrollThree);
+       //JScrollPane  scrollNewWindow = new JScrollPane(turnCounterFBArea);
+        frame.getContentPane().add(BorderLayout.CENTER, aPanel);
+        frame.pack();
+        frame.setLocationByPlatform(true);
+        frame.setVisible(true);
+        frame.setResizable(false);
+       isPlayerPileWindowOpen = true;
+       
+       
+        frame.addWindowListener(new WindowAdapter(){
+                        public void windowClosing(WindowEvent e){
+                                //System.exit(0);
+                                playerPiles.setSelected(false);
+                                isPlayerPileWindowOpen = false;
+                                frame.setVisible(false);
+                                frame.dispose();
+                                //frame.removeAll();
+                        }
+                    });
+
+   }
+      public void openWindowsForAllDebug(){
+       
+       JFrame frame = new JFrame("Turn Match Scan");
+       frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        try 
+           {
+              UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+           } catch (Exception e) {
+              e.printStackTrace();
+           }
+       JPanel aPanel = new JPanel();  
+       aPanel.setLayout(new FlowLayout());
+       aPanel.add(scrollFour);
+       //JScrollPane  scrollNewWindow = new JScrollPane(turnCounterFBArea);
+        frame.getContentPane().add(BorderLayout.CENTER, aPanel);
+        frame.pack();
+        frame.setLocationByPlatform(true);
+        frame.setVisible(true);
+        frame.setResizable(false);
+       isallDebugWindowOpen = true;
+       
+       
+
+        frame.addWindowListener(new WindowAdapter(){
+                        public void windowClosing(WindowEvent e){
+                                //System.exit(0);
+                                allDebug.setSelected(false);
+                                isallDebugWindowOpen = false;
+                                frame.setVisible(false);
+                                frame.dispose();
+                                //frame.removeAll();
+                        }
+                    });
+
+
+
+   }
    public class CheckBoxListener implements ItemListener
    {  
       public void itemStateChanged(ItemEvent e)
       {	// process checkbox events
          if ( e.getSource() == cpuHand )	
          {
-            //cpuHand.setSelected(false);
-            //System.out.println(fEngine.getComputerHandDisplay());
+             if (!deckHandWindowOpen){
+                 openWindowsForDeckInfo();
+             }
          }
          else if ( e.getSource() == dckHand )	
          {
-            //dckHand.setSelected(false);
-            //System.out.println(fEngine.getdeckHandDisplay());
+             if (!deckHandWindowOpen){
+                 openWindowsForDeckInfo();
+             }
+         }
+         else if (e.getSource() == trnLog){
+             if (!isTurnLogWindowOpen){
+                 openWindowsForTurnInfo();
+             }
+         }
+         else if (e.getSource() == playerPiles){
+             if (!isPlayerPileWindowOpen){
+                 openWindowsForPlayerPile();
+             }
+         }
+         else if (e.getSource() == allDebug){
+             if (!isallDebugWindowOpen){
+                 openWindowsForAllDebug();
+             }
          }
       }
    }
